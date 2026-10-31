@@ -37,7 +37,8 @@ jobs:
       - run: node --test scripts/readme-agent.test.mjs
       - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
         with:
-          go-version-file: agent/renderer/go.mod
+          go-version: stable
+          check-latest: true
           cache-dependency-path: agent/renderer/go.sum
       - run: go test ./...
         working-directory: agent/renderer
@@ -65,7 +66,8 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
       - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
         with:
-          go-version-file: agent/renderer/go.mod
+          go-version: stable
+          check-latest: true
           cache-dependency-path: agent/renderer/go.sum
       - name: Let the terminal talk to visitors
         run: go run .

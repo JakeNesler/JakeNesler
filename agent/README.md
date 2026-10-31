@@ -17,6 +17,8 @@ Scranton weather comes from [NWS station KAVP](https://api.weather.gov/stations/
 
 The local day and part of day use `America/New_York`, including daylight saving transitions: for example, "Saturday evening in Scranton." No minute-by-minute clock is displayed. This is the time of the last snapshot, not a clock connected to the visitor's browser.
 
+The renderer requires Go 1.27.3 or later. The workflow resolves the latest stable Go release for both tests and GIF rendering.
+
 The workflow publishes a run summary and commits only `README.md`, `agent/state.json`, and `agent/terminal.gif` as `github-actions[bot]`. It uses the repository's built-in `GITHUB_TOKEN`; no personal token or AI key is needed. It does not post issue comments.
 
 Run **Profile terminal → Run workflow** in Actions to wake it manually. Scheduled runs use the default branch. A failed poll fails the run and leaves the last committed heartbeat intact. Re-running the same successful run does not advance the lap again.
