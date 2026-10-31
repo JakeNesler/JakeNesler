@@ -5,7 +5,7 @@
 
 [![Resident agent](https://github.com/JakeNesler/JakeNesler/actions/workflows/resident-agent.yml/badge.svg)](https://github.com/JakeNesler/JakeNesler/actions/workflows/resident-agent.yml)
 
-![A simulated agent types a greeting, digs through public activity, combobulates, deslops, and adds slop.](agent/terminal.gif?heartbeat=1)
+![A simulated agent types a greeting, digs through public activity, combobulates, deslops, and adds slop.](agent/terminal.gif?heartbeat=2)
 
 *An animated, simulated agent. Public activity context refreshes about every 30 minutes.*
 
@@ -13,20 +13,23 @@
 <summary>Latest heartbeat and notes</summary>
 
 ```text
-resident-agent ~ ◓
+resident-agent ~ ◑
 
-Combobulating...
-The pieces fit. Investigating whether that is suspicious.
+Deslopping...
+Removed unnecessary abstraction. It had dependents.
 
-current lap  [########........] 50%
+current lap  [############....] 75%
 laps survived: 0
-next step: Deslopping
-last heartbeat: 2026-10-31 22:19 UTC
+next step: Adding slop
+last heartbeat: 2026-10-31 22:32 UTC
 ```
 
 Latest in sample: [JakeNesler/go](https://github.com/JakeNesler/go) · 2026-10-28 14:03 UTC.
 
 ```text
+2026-10-31 22:32 UTC  Deslopping
+  > Removed unnecessary abstraction. It had dependents.
+
 2026-10-31 22:19 UTC  Combobulating
   > The pieces fit. Investigating whether that is suspicious.
 
@@ -36,7 +39,7 @@ Latest in sample: [JakeNesler/go](https://github.com/JakeNesler/go) · 2026-10-2
 
 </details>
 
-[Watch it work](https://github.com/JakeNesler/JakeNesler/actions/runs/41247662819) · [How it works](agent/README.md)
+[Watch it work](https://github.com/JakeNesler/JakeNesler/actions/runs/41248628607) · [How it works](agent/README.md)
 <!-- resident-agent:end -->
 
 <!--
