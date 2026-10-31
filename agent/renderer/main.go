@@ -12,17 +12,15 @@ import (
 	"io"
 	"math/rand"
 	"os"
-	"regexp"
 	"strings"
 	"time"
-	_ "time/tzdata"
 
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/basicfont"
 	"golang.org/x/image/math/fixed"
 )
 
-const width, height, scale = 480, 264, 2
+const width, height, scale = 480, 240, 2
 
 var colors = color.Palette{
 	color.RGBA{14, 18, 23, 255},    // background
@@ -36,40 +34,6 @@ var colors = color.Palette{
 type state struct {
 	Tick      int       `json:"tick"`
 	UpdatedAt time.Time `json:"updatedAt"`
-	Weather   *weather  `json:"weather"`
-	Snapshot  struct {
-		LatestRepo string `json:"latestRepo"`
-	} `json:"snapshot"`
-}
-
-type weather struct {
-	ObservedAt   time.Time `json:"observedAt"`
-	TemperatureF *float64  `json:"temperatureF"`
-	Description  string    `json:"description"`
-	Stale        bool      `json:"stale"`
-	Unavailable  bool      `json:"unavailable"`
-}
-
-var scranton = func() *time.Location {
-	zone, err := time.LoadLocation("America/New_York")
-	if err != nil {
-		panic(err)
-	}
-	return zone
-}()
-
-func localPeriod(at time.Time) string {
-	local := at.In(scranton)
-	period := "night"
-	switch hour := local.Hour(); {
-	case hour >= 5 && hour < 12:
-		period = "morning"
-	case hour >= 12 && hour < 17:
-		period = "afternoon"
-	case hour >= 17 && hour < 21:
-		period = "evening"
-	}
-	return local.Weekday().String() + " " + period
 }
 
 type animator struct {
@@ -77,7 +41,6 @@ type animator struct {
 	previous   *image.Paletted
 	messages   []string
 	activity   string
-	updated    string
 	clock      int
 	wordOffset int
 	retracting bool
@@ -142,11 +105,10 @@ func (a *animator) bird(img *image.Paletted) {
 	}
 }
 
-func newAnimator(updated time.Time) *animator {
+func newAnimator() *animator {
 	return &animator{
 		gif:      gif.GIF{LoopCount: 0, Config: image.Config{ColorModel: colors, Width: width * scale, Height: height * scale}},
-		activity: "Digging",
-		updated:  "Scranton | " + localPeriod(updated) + " snapshot",
+		activity: "Idling",
 	}
 }
 
@@ -200,8 +162,6 @@ func (a *animator) screen(cursor bool) *image.Paletted {
 		}
 	}
 	text(img, 20, 221, string("|/-\\"[(a.clock/12)%4])+" "+a.thinkingWord()+"...", 5)
-	draw.Draw(img, image.Rect(20, 233, 460, 234), image.NewUniform(colors[1]), image.Point{}, draw.Src)
-	text(img, 20, 252, a.updated, 3)
 	return img
 }
 
@@ -258,9 +218,9 @@ func (a *animator) typeMessage(value, activity string, pause int) {
 }
 
 type dialogue struct {
-	Greeting, Digging, Combobulating, Confident, Correction string
-	Deslopping, AddingSlop                                  string
-	Tangent                                                 []string
+	Greeting, Idle, Combobulating, Confident, Correction string
+	Deslopping, AddingSlop                               string
+	Tangent                                              []string
 }
 
 func planDialogue(s state) dialogue {
@@ -268,7 +228,7 @@ func planDialogue(s state) dialogue {
 	pick := func(lines ...string) string { return lines[rng.Intn(len(lines))] }
 	d := dialogue{
 		Greeting:      pick("hm.", "...", "let's see."),
-		Digging:       pick("checking the public feed.", "looking through the recent activity.", "reading."),
+		Idle:          pick("looking around.", "watching the cursor.", "waiting for something to happen."),
 		Combobulating: pick("one moment.", "thinking.", "hm."),
 		Confident:     pick("i think...", "wait.", "maybe."),
 		Correction:    pick("no.", "not that.", "looking again."),
@@ -289,38 +249,15 @@ func planDialogue(s state) dialogue {
 	return d
 }
 
-func weatherThought(s state) string {
-	w := s.Weather
-	if w == nil || w.Unavailable {
-		return "scranton weather feed is taking a moment."
-	}
-	conditions := strings.ToLower(w.Description)
-	if w.TemperatureF != nil {
-		conditions = fmt.Sprintf("%.0f F, %s", *w.TemperatureF, conditions)
-	}
-	prefix := "scranton"
-	if w.Stale {
-		prefix = "last scranton report (feed unavailable)"
-	}
-	return fmt.Sprintf("%s: %s. reported %s.", prefix, strings.Trim(conditions, ", "), strings.ToLower(localPeriod(w.ObservedAt)))
-}
-
 func animation(s state) *gif.GIF {
 	d := planDialogue(s)
-	a := newAnimator(s.UpdatedAt)
+	a := newAnimator()
 	a.wordOffset = s.Tick % len(thinkingWords)
 	a.hold(60)
-	a.typeMessage(d.Greeting, "Digging", 100)
-	a.typeMessage(strings.ToLower(localPeriod(s.UpdatedAt))+" in scranton.", "Checking weather", 120)
-	a.typeMessage(weatherThought(s), "Checking weather", 180)
-	a.typeMessage(d.Digging, "Digging", 140)
-	if s.Snapshot.LatestRepo != "" {
-		a.typeMessage("latest activity: "+s.Snapshot.LatestRepo, "Digging", 180)
-	} else {
-		a.typeMessage("no recent public activity.", "Digging", 180)
-	}
-	a.typeMessage(d.Combobulating, "Combobulating", 160)
-	a.typeMessage(d.Confident, "Combobulating", 90)
+	a.typeMessage(d.Greeting, "Idling", 100)
+	a.typeMessage(d.Idle, "Idling", 300)
+	a.typeMessage(d.Combobulating, "Combobulating", 200)
+	a.typeMessage(d.Confident, "Combobulating", 180)
 	i := len(a.messages) - 1
 	a.retracting = true
 	for len(a.messages[i]) > 0 {
@@ -329,14 +266,14 @@ func animation(s state) *gif.GIF {
 	}
 	a.retracting = false
 	a.messages = a.messages[:i]
-	a.typeMessage(d.Correction, "Combobulating", 140)
+	a.typeMessage(d.Correction, "Combobulating", 240)
 	for _, thought := range d.Tangent {
 		a.typeMessage(thought, "Reconsidering", 180)
 	}
-	a.typeMessage(d.Deslopping, "Deslopping", 180)
-	a.typeMessage(d.AddingSlop, "Adding slop", 160)
+	a.typeMessage(d.Deslopping, "Deslopping", 200)
+	a.typeMessage(d.AddingSlop, "Adding slop", 200)
 	a.activity = "Combobulating"
-	a.hold(1000)
+	a.hold(1200)
 	return &a.gif
 }
 
@@ -350,16 +287,13 @@ func run(input string, output io.Writer) error {
 		return err
 	}
 	if s.UpdatedAt.IsZero() {
-		return fmt.Errorf("missing public poll timestamp")
-	}
-	if repo := s.Snapshot.LatestRepo; repo != "" && !regexp.MustCompile(`^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$`).MatchString(repo) {
-		return fmt.Errorf("invalid public repository name")
+		return fmt.Errorf("missing scene timestamp")
 	}
 	return gif.EncodeAll(output, animation(s))
 }
 
 func main() {
-	input := flag.String("state", "../state.json", "public activity snapshot")
+	input := flag.String("state", "../state.json", "NPC scene state")
 	output := flag.String("out", "../terminal.gif", "animated terminal image")
 	flag.Parse()
 	var encoded bytes.Buffer

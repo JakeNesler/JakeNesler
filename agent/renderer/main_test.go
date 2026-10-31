@@ -15,7 +15,6 @@ import (
 
 func TestAnimationRoundTrip(t *testing.T) {
 	s := state{UpdatedAt: time.Date(2026, 10, 31, 22, 0, 0, 0, time.UTC)}
-	s.Snapshot.LatestRepo = "JakeNesler/go"
 	var encoded bytes.Buffer
 	if err := gif.EncodeAll(&encoded, animation(s)); err != nil {
 		t.Fatal(err)
@@ -44,7 +43,7 @@ func TestAnimationRoundTrip(t *testing.T) {
 }
 
 func TestChangedRectanglesPreserveTypingAndBackspacing(t *testing.T) {
-	a := newAnimator(time.Now())
+	a := newAnimator()
 	a.messages = []string{"hello there"}
 	a.frame(6, true)
 	a.messages[0] = "hello there visitor"
@@ -68,7 +67,7 @@ func TestChangedRectanglesPreserveTypingAndBackspacing(t *testing.T) {
 }
 
 func TestInvalidSnapshotsFailBeforeEncoding(t *testing.T) {
-	for _, value := range []string{`{`, `{}`, `{"updatedAt":"bad"}`, `{"updatedAt":"2026-10-31T22:00:00Z","snapshot":{"latestRepo":"bad/name\nhello"}}`} {
+	for _, value := range []string{`{`, `{}`, `{"updatedAt":"bad"}`} {
 		path := filepath.Join(t.TempDir(), "state.json")
 		if err := os.WriteFile(path, []byte(value), 0600); err != nil {
 			t.Fatal(err)
@@ -80,8 +79,8 @@ func TestInvalidSnapshotsFailBeforeEncoding(t *testing.T) {
 	}
 }
 
-func TestLongRepositoryNamesFitThePanel(t *testing.T) {
-	for _, line := range wrap("latest stop: owner/" + strings.Repeat("a", 100)) {
+func TestLongThoughtsFitThePanel(t *testing.T) {
+	for _, line := range wrap("a thought: " + strings.Repeat("a", 100)) {
 		if len(line) > 60 {
 			t.Fatalf("line overflows the panel: %q", line)
 		}
@@ -107,36 +106,5 @@ func TestDialogueVariesButRerendersDeterministically(t *testing.T) {
 	}
 	if len(greetings) < 2 || tangents == 0 || tangents == 200 || !swallow {
 		t.Fatalf("missing variety: greetings=%d tangents=%d swallow=%v", len(greetings), tangents, swallow)
-	}
-}
-
-func TestScrantonUsesLocalDayAndPartOfDay(t *testing.T) {
-	for _, tc := range []struct{ utc, want string }{
-		{"2026-10-31T22:00:00Z", "Saturday evening"},
-		{"2026-06-01T01:00:00Z", "Sunday night"},
-		{"2026-01-01T15:00:00Z", "Thursday morning"},
-		{"2026-11-01T05:30:00Z", "Sunday night"},
-		{"2026-11-01T06:30:00Z", "Sunday night"},
-	} {
-		at, err := time.Parse(time.RFC3339, tc.utc)
-		if err != nil {
-			t.Fatal(err)
-		}
-		if got := localPeriod(at); got != tc.want {
-			t.Fatalf("%s: got %q, want %q", tc.utc, got, tc.want)
-		}
-	}
-}
-
-func TestWeatherReportsMissingAndStaleDataHonestly(t *testing.T) {
-	s := state{}
-	if !strings.Contains(weatherThought(s), "taking a moment") {
-		t.Fatal("missing observation should be unavailable")
-	}
-	temp := 50.0
-	s.Weather = &weather{ObservedAt: time.Date(2026, 10, 31, 22, 0, 0, 0, time.UTC), TemperatureF: &temp, Description: "Mostly Cloudy", Stale: true}
-	got := weatherThought(s)
-	if !strings.Contains(got, "feed unavailable") || !strings.Contains(got, "50 F, mostly cloudy") || !strings.Contains(got, "saturday evening") {
-		t.Fatalf("incorrect stale report: %s", got)
 	}
 }
