@@ -1,4 +1,4 @@
-name: Resident agent
+name: Profile terminal
 
 on:
   schedule:
@@ -8,18 +8,18 @@ on:
     paths:
       - scripts/**
       - agent/renderer/**
-      - .github/workflows/resident-agent.yml
+      - .github/workflows/profile-terminal.yml
   pull_request:
     paths:
       - scripts/**
       - agent/renderer/**
-      - .github/workflows/resident-agent.yml
+      - .github/workflows/profile-terminal.yml
 
 permissions:
   contents: read
 
 concurrency:
-  group: resident-agent
+  group: profile-terminal
   cancel-in-progress: false
 
 jobs:
@@ -59,7 +59,7 @@ jobs:
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '22'
-      - name: Poll public activity and update the resident agent
+      - name: Poll public activity and update the terminal
         run: node scripts/readme-agent.mjs
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -67,7 +67,7 @@ jobs:
         with:
           go-version-file: agent/renderer/go.mod
           cache-dependency-path: agent/renderer/go.sum
-      - name: Let the resident agent talk to visitors
+      - name: Let the terminal talk to visitors
         run: go run .
         working-directory: agent/renderer
       - name: Leave a small sign of life
@@ -78,5 +78,5 @@ jobs:
           if git diff --cached --quiet; then
             exit 0
           fi
-          git commit -m 'chore: resident agent heartbeat'
+          git commit -m 'chore: profile terminal heartbeat'
           git push

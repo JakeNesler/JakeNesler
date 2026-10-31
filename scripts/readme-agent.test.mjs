@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { advance, END, PHASES, render, replacePanel, START, summarizeEvents } from './readme-agent.mjs';
+import { advance, END, PHASES, pollWeather, render, replacePanel, START, summarizeEvents, summarizeWeather } from './readme-agent.mjs';
 
 const repository = 'JakeNesler/JakeNesler';
 const event = { public: true, repo: { name: 'JakeNesler/example' }, created_at: '2026-10-31T10:00:00Z' };
@@ -22,11 +22,8 @@ test('cycles through all phases and bounds the journal over repeated polls', () 
     assert.equal(state.log.length, Math.min(i + 1, 6));
   }
   assert.equal(state.tick, 19);
-  assert.match(render(state, repository), /laps survived: 4/);
-  assert.match(render(state, repository), /\[################\] 100%/);
-  assert.match(render(state, repository), /actions\/runs\/19/);
   assert.match(render(state, repository), /agent\/terminal\.gif\?heartbeat=19/);
-  assert.match(render(state, repository), /Latest heartbeat and notes/);
+  assert.match(render(state, repository), /^!\[[^\n]*\]\(https:\/\/[^\n]*\)$/);
 });
 
 test('rerunning the same Actions run is idempotent', () => {
@@ -49,5 +46,24 @@ test('filters private events, self-generated activity, and unsafe repository nam
   assert.deepEqual(summarizeEvents(events, repository), [event]);
   assert.throws(() => summarizeEvents({}, repository));
   const state = advance(null, { ...options(), events: [] });
-  assert.match(render(state, repository), /No other public activity/);
+  assert.equal(state.snapshot.latestRepo, null);
+});
+
+test('weather converts NWS units and rejects old or missing observations', () => {
+  const now = new Date('2026-10-31T12:00:00Z');
+  const payload = { properties: { timestamp: '2026-10-31T11:54:00Z', temperature: { value: 10, unitCode: 'wmoUnit:degC' }, textDescription: 'Mostly Cloudy' } };
+  assert.equal(summarizeWeather(payload, now).temperatureF, 50);
+  assert.equal(summarizeWeather({ properties: { ...payload.properties, temperature: { value: null } } }, now).temperatureF, null);
+  assert.throws(() => summarizeWeather({ properties: { ...payload.properties, timestamp: '2026-10-30T12:00:00Z' } }, now));
+  assert.throws(() => summarizeWeather({}, now));
+});
+
+test('a failed weather poll is visibly stale and does not block the heartbeat', async () => {
+  const prior = { observedAt: '2026-10-31T11:54:00Z', temperatureF: 50, description: 'Cloudy', stale: false };
+  const fetcher = async () => ({ ok: false, status: 503 });
+  const weather = await pollWeather(prior, options().now, fetcher);
+  assert.equal(weather.stale, true);
+  assert.equal(weather.observedAt, prior.observedAt);
+  assert.deepEqual(await pollWeather(null, options().now, fetcher), { unavailable: true });
+  assert.deepEqual(advance(null, { ...options(), weather }).weather, weather);
 });

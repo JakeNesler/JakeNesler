@@ -10,10 +10,12 @@ import (
 	"image/draw"
 	"image/gif"
 	"io"
+	"math/rand"
 	"os"
 	"regexp"
 	"strings"
 	"time"
+	_ "time/tzdata"
 
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/basicfont"
@@ -32,10 +34,42 @@ var colors = color.Palette{
 }
 
 type state struct {
+	Tick      int       `json:"tick"`
 	UpdatedAt time.Time `json:"updatedAt"`
+	Weather   *weather  `json:"weather"`
 	Snapshot  struct {
 		LatestRepo string `json:"latestRepo"`
 	} `json:"snapshot"`
+}
+
+type weather struct {
+	ObservedAt   time.Time `json:"observedAt"`
+	TemperatureF *float64  `json:"temperatureF"`
+	Description  string    `json:"description"`
+	Stale        bool      `json:"stale"`
+	Unavailable  bool      `json:"unavailable"`
+}
+
+var scranton = func() *time.Location {
+	zone, err := time.LoadLocation("America/New_York")
+	if err != nil {
+		panic(err)
+	}
+	return zone
+}()
+
+func localPeriod(at time.Time) string {
+	local := at.In(scranton)
+	period := "night"
+	switch hour := local.Hour(); {
+	case hour >= 5 && hour < 12:
+		period = "morning"
+	case hour >= 12 && hour < 17:
+		period = "afternoon"
+	case hour >= 17 && hour < 21:
+		period = "evening"
+	}
+	return local.Weekday().String() + " " + period
 }
 
 type animator struct {
@@ -51,7 +85,7 @@ func newAnimator(updated time.Time) *animator {
 	return &animator{
 		gif:      gif.GIF{LoopCount: 0, Config: image.Config{ColorModel: colors, Width: width * scale, Height: height * scale}},
 		activity: "Digging",
-		updated:  updated.UTC().Format("2006-01-02 15:04 UTC"),
+		updated:  "Scranton | " + localPeriod(updated) + " snapshot",
 	}
 }
 
@@ -76,8 +110,7 @@ func wrap(value string) []string {
 
 func (a *animator) screen(cursor bool) *image.Paletted {
 	img := image.NewPaletted(image.Rect(0, 0, width, height), colors)
-	text(img, 20, 27, "jake / resident-agent", 2)
-	text(img, 390, 27, "SIMULATED", 3)
+	text(img, 20, 27, "Agent:", 2)
 	draw.Draw(img, image.Rect(20, 43, 460, 44), image.NewUniform(colors[1]), image.Point{}, draw.Src)
 	var lines []string
 	for i, message := range a.messages {
@@ -106,7 +139,7 @@ func (a *animator) screen(cursor bool) *image.Paletted {
 	}
 	text(img, 20, 221, string("|/-\\"[(a.clock/12)%4])+" "+a.activity+"...", 5)
 	draw.Draw(img, image.Rect(20, 233, 460, 234), image.NewUniform(colors[1]), image.Point{}, draw.Src)
-	text(img, 20, 252, "public poll: "+a.updated, 3)
+	text(img, 20, 252, a.updated, 3)
 	return img
 }
 
@@ -162,30 +195,89 @@ func (a *animator) typeMessage(value, activity string, pause int) {
 	a.hold(pause)
 }
 
+type dialogue struct {
+	Greeting, Welcome, Digging, Combobulating, Confident, Correction string
+	Deslopping, AddingSlop, Aftermath, Goodbye                       string
+	Tangent                                                          []string
+}
+
+func planDialogue(s state) dialogue {
+	rng := rand.New(rand.NewSource(s.UpdatedAt.Unix() + int64(s.Tick)*7919))
+	pick := func(lines ...string) string { return lines[rng.Intn(len(lines))] }
+	d := dialogue{
+		Greeting:      pick("oh, hey.", "hello. i was pretending to be busy.", "hi. please ignore the smoke."),
+		Welcome:       pick("welcome to jake's profile.", "make yourself at home. don't touch the YAML.", "you're just in time to watch this go sideways."),
+		Digging:       pick("i'm digging through the public activity feed.", "digging... the rabbit hole has a basement.", "digging... found another side project."),
+		Combobulating: pick("combobulating what i found...", "combobulating... the pieces are arguing.", "combobulating... one moment."),
+		Confident:     pick("this should only take a second.", "i have this under control.", "the plan is extremely normal."),
+		Correction:    pick("i have no useful estimate.", "i have opened another terminal.", "the plan has become a YAML file."),
+		Deslopping:    pick("deslopping...", "removing load-bearing slop.", "deslopping... this used to be a framework."),
+		AddingSlop:    pick("adding slop...", "adding the slop back. several things needed it.", "installing artisanal, locally sourced slop."),
+		Aftermath:     pick("hang on. that undid the previous step.", "the tests pass. they have lowered their standards.", "slop is now a transitive dependency."),
+		Goodbye:       pick("have a look around. i'll keep digging.", "anyway. i'll be here arguing with a semicolon.", "feel free to stay. this could take a while."),
+	}
+	// A tangent is occasional; routine updates still have different phrasing.
+	if rng.Intn(3) == 0 {
+		verb := pick("compiling", "defragmenting", "rebasing", "containerizing", "rotating")
+		object := pick("soup", "the load-bearing duck", "a haunted mutex", "the concept of Tuesday", "an emergency rubber chicken")
+		tangents := [][]string{
+			{"what is the terminal velocity of a latent swallow?", "african or european embedding?", "right. i'll open an issue."},
+			{"consulting the ministry of silly tool calls.", "approval denied. walk was insufficiently silly."},
+			{"found a load-bearing TODO.", "leaving that one alone."},
+			{"the build is green.", "it has learned to lie."},
+			{"currently " + verb + " " + object + ".", "this is somehow in scope."},
+		}
+		d.Tangent = tangents[rng.Intn(len(tangents))]
+	}
+	return d
+}
+
+func weatherThought(s state) string {
+	w := s.Weather
+	if w == nil || w.Unavailable {
+		return "scranton weather feed is taking a moment."
+	}
+	conditions := strings.ToLower(w.Description)
+	if w.TemperatureF != nil {
+		conditions = fmt.Sprintf("%.0f F, %s", *w.TemperatureF, conditions)
+	}
+	prefix := "scranton"
+	if w.Stale {
+		prefix = "last scranton report (feed unavailable)"
+	}
+	return fmt.Sprintf("%s: %s. reported %s.", prefix, strings.Trim(conditions, ", "), strings.ToLower(localPeriod(w.ObservedAt)))
+}
+
 func animation(s state) *gif.GIF {
+	d := planDialogue(s)
 	a := newAnimator(s.UpdatedAt)
 	a.hold(60)
-	a.typeMessage("oh, hey.", "Digging", 100)
-	a.typeMessage("welcome to jake's profile.", "Digging", 120)
-	a.typeMessage("i'm digging through the public activity feed.", "Digging", 140)
+	a.typeMessage(d.Greeting, "Digging", 100)
+	a.typeMessage(d.Welcome, "Digging", 120)
+	a.typeMessage(strings.ToLower(localPeriod(s.UpdatedAt))+" in scranton.", "Checking weather", 120)
+	a.typeMessage(weatherThought(s), "Checking weather", 180)
+	a.typeMessage(d.Digging, "Digging", 140)
 	if s.Snapshot.LatestRepo != "" {
 		a.typeMessage("latest stop: "+s.Snapshot.LatestRepo, "Digging", 180)
 	} else {
 		a.typeMessage("quiet feed. i'll find something to overthink.", "Digging", 180)
 	}
-	a.typeMessage("combobulating what i found...", "Combobulating", 160)
-	a.typeMessage("this should only take a second.", "Combobulating", 90)
+	a.typeMessage(d.Combobulating, "Combobulating", 160)
+	a.typeMessage(d.Confident, "Combobulating", 90)
 	i := len(a.messages) - 1
 	for len(a.messages[i]) > 0 {
 		a.messages[i] = a.messages[i][:max(0, len(a.messages[i])-3)]
 		a.frame(6, true)
 	}
 	a.messages = a.messages[:i]
-	a.typeMessage("i have no useful estimate.", "Combobulating", 140)
-	a.typeMessage("deslopping...", "Deslopping", 180)
-	a.typeMessage("adding slop...", "Adding slop", 160)
-	a.typeMessage("hang on. that undid the previous step.", "Adding slop", 180)
-	a.typeMessage("have a look around. i'll keep digging.", "Digging", 480)
+	a.typeMessage(d.Correction, "Combobulating", 140)
+	for _, thought := range d.Tangent {
+		a.typeMessage(thought, "Reconsidering", 180)
+	}
+	a.typeMessage(d.Deslopping, "Deslopping", 180)
+	a.typeMessage(d.AddingSlop, "Adding slop", 160)
+	a.typeMessage(d.Aftermath, "Adding slop", 180)
+	a.typeMessage(d.Goodbye, "Digging", 480)
 	return &a.gif
 }
 

@@ -7,6 +7,7 @@ import (
 	"image/gif"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 	"testing"
 	"time"
@@ -84,5 +85,58 @@ func TestLongRepositoryNamesFitThePanel(t *testing.T) {
 		if len(line) > 60 {
 			t.Fatalf("line overflows the panel: %q", line)
 		}
+	}
+}
+
+func TestDialogueVariesButRerendersDeterministically(t *testing.T) {
+	s := state{UpdatedAt: time.Date(2026, 10, 31, 22, 0, 0, 0, time.UTC)}
+	if !reflect.DeepEqual(planDialogue(s), planDialogue(s)) {
+		t.Fatal("rerendering one heartbeat changed its dialogue")
+	}
+	greetings := map[string]bool{}
+	tangents := 0
+	swallow := false
+	for i := 0; i < 200; i++ {
+		s.Tick = i
+		d := planDialogue(s)
+		greetings[d.Greeting] = true
+		if len(d.Tangent) > 0 {
+			tangents++
+			swallow = swallow || strings.Contains(d.Tangent[0], "latent swallow")
+		}
+	}
+	if len(greetings) < 2 || tangents == 0 || tangents == 200 || !swallow {
+		t.Fatalf("missing variety: greetings=%d tangents=%d swallow=%v", len(greetings), tangents, swallow)
+	}
+}
+
+func TestScrantonUsesLocalDayAndPartOfDay(t *testing.T) {
+	for _, tc := range []struct{ utc, want string }{
+		{"2026-10-31T22:00:00Z", "Saturday evening"},
+		{"2026-06-01T01:00:00Z", "Sunday night"},
+		{"2026-01-01T15:00:00Z", "Thursday morning"},
+		{"2026-11-01T05:30:00Z", "Sunday night"},
+		{"2026-11-01T06:30:00Z", "Sunday night"},
+	} {
+		at, err := time.Parse(time.RFC3339, tc.utc)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if got := localPeriod(at); got != tc.want {
+			t.Fatalf("%s: got %q, want %q", tc.utc, got, tc.want)
+		}
+	}
+}
+
+func TestWeatherReportsMissingAndStaleDataHonestly(t *testing.T) {
+	s := state{}
+	if !strings.Contains(weatherThought(s), "taking a moment") {
+		t.Fatal("missing observation should be unavailable")
+	}
+	temp := 50.0
+	s.Weather = &weather{ObservedAt: time.Date(2026, 10, 31, 22, 0, 0, 0, time.UTC), TemperatureF: &temp, Description: "Mostly Cloudy", Stale: true}
+	got := weatherThought(s)
+	if !strings.Contains(got, "feed unavailable") || !strings.Contains(got, "50 F, mostly cloudy") || !strings.Contains(got, "saturday evening") {
+		t.Fatalf("incorrect stale report: %s", got)
 	}
 }
