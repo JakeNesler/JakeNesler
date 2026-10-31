@@ -73,7 +73,7 @@ func TestInvalidSnapshotsFailBeforeEncoding(t *testing.T) {
 			t.Fatal(err)
 		}
 		var output bytes.Buffer
-		if err := run(path, &output); err == nil || output.Len() > 0 {
+		if _, err := run(path, &output); err == nil || output.Len() > 0 {
 			t.Fatalf("invalid snapshot produced output: %s", value)
 		}
 	}

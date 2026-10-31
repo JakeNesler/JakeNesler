@@ -12,6 +12,7 @@ import (
 	"io"
 	"math/rand"
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -277,28 +278,34 @@ func animation(s state) *gif.GIF {
 	return &a.gif
 }
 
-func run(input string, output io.Writer) error {
+func run(input string, output io.Writer) (int, error) {
 	data, err := os.ReadFile(input)
 	if err != nil {
-		return err
+		return 0, err
 	}
 	var s state
 	if err := json.Unmarshal(data, &s); err != nil {
-		return err
+		return 0, err
 	}
 	if s.UpdatedAt.IsZero() {
-		return fmt.Errorf("missing scene timestamp")
+		return 0, fmt.Errorf("missing scene timestamp")
 	}
-	return gif.EncodeAll(output, animation(s))
+	if s.Tick < 0 {
+		return 0, fmt.Errorf("invalid scene counter")
+	}
+	return s.Tick, gif.EncodeAll(output, animation(s))
 }
 
 func main() {
 	input := flag.String("state", "../state.json", "NPC scene state")
-	output := flag.String("out", "../terminal.gif", "animated terminal image")
+	output := flag.String("out", "", "output image (default: terminal-<tick>.gif beside the state file)")
 	flag.Parse()
 	var encoded bytes.Buffer
-	err := run(*input, &encoded)
+	tick, err := run(*input, &encoded)
 	if err == nil {
+		if *output == "" {
+			*output = filepath.Join(filepath.Dir(*input), fmt.Sprintf("terminal-%d.gif", tick))
+		}
 		err = os.WriteFile(*output, encoded.Bytes(), 0644)
 	}
 	if err != nil {

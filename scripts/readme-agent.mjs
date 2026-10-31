@@ -1,4 +1,4 @@
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile, unlink, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
@@ -22,8 +22,10 @@ export function replacePanel(readme, panel) {
 }
 
 export function advance(previous, { now, runId, runUrl }) {
+  if (previous && (!Number.isSafeInteger(previous.tick) || previous.tick < 0)) throw new Error('Invalid NPC scene counter');
   if (runId && previous?.runId === runId) return previous;
   const tick = previous ? previous.tick + 1 : 0;
+  if (!Number.isSafeInteger(tick)) throw new Error('NPC scene counter overflow');
   const phase = tick % PHASES.length;
   const [activity, thought] = PHASES[phase];
   return {
@@ -36,7 +38,7 @@ export function advance(previous, { now, runId, runUrl }) {
 }
 
 export function render(state, repository) {
-  return `![An animated NPC agent types idle thoughts beside a blinking pixel bird.](https://raw.githubusercontent.com/${repository}/main/agent/terminal.gif?heartbeat=${state.tick})`;
+  return `![An animated NPC agent types idle thoughts beside a blinking pixel bird.](https://raw.githubusercontent.com/${repository}/main/agent/terminal-${state.tick}.gif)`;
 }
 
 export async function main() {
@@ -60,6 +62,13 @@ export async function main() {
   const panel = render(state, repository);
   await writeFile('README.md', replacePanel(readme, panel));
   await writeFile('agent/state.json', JSON.stringify(state, null, 2) + '\n');
+  if (previous && previous.tick !== state.tick) {
+    try {
+      await unlink(`agent/terminal-${previous.tick}.gif`);
+    } catch (error) {
+      if (error.code !== 'ENOENT') throw error;
+    }
+  }
   if (process.env.GITHUB_STEP_SUMMARY) await writeFile(process.env.GITHUB_STEP_SUMMARY, panel + '\n', { flag: 'a' });
   console.log(`${PHASES[state.tick % PHASES.length][0]}: ${state.log[0].thought}`);
 }

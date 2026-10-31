@@ -21,7 +21,7 @@ test('cycles through all phases and bounds the journal over repeated updates', (
     assert.equal(state.log.length, Math.min(i + 1, 6));
   }
   assert.equal(state.tick, 19);
-  assert.match(render(state, repository), /agent\/terminal\.gif\?heartbeat=19/);
+  assert.match(render(state, repository), /agent\/terminal-19\.gif/);
   assert.match(render(state, repository), /^!\[[^\n]*\]\(https:\/\/[^\n]*\)$/);
 });
 
