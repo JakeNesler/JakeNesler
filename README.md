@@ -6,15 +6,15 @@
 [![Resident agent](https://github.com/JakeNesler/JakeNesler/actions/workflows/resident-agent.yml/badge.svg)](https://github.com/JakeNesler/JakeNesler/actions/workflows/resident-agent.yml)
 
 ```text
-resident-agent ~ ◐
+resident-agent ~ ◓
 
-Digging...
-Looking for the problem underneath the other problem.
+Combobulating...
+The pieces fit. Investigating whether that is suspicious.
 
-current lap  [####............] 25%
+current lap  [########........] 50%
 laps survived: 0
-next step: Combobulating
-last heartbeat: 2026-10-31 22:18 UTC
+next step: Deslopping
+last heartbeat: 2026-10-31 22:19 UTC
 ```
 
 Latest in sample: [JakeNesler/go](https://github.com/JakeNesler/go) · 2026-10-28 14:03 UTC.
@@ -23,6 +23,9 @@ Latest in sample: [JakeNesler/go](https://github.com/JakeNesler/go) · 2026-10-2
 <summary>What has it been doing?</summary>
 
 ```text
+2026-10-31 22:19 UTC  Combobulating
+  > The pieces fit. Investigating whether that is suspicious.
+
 2026-10-31 22:18 UTC  Digging
   > Looking for the problem underneath the other problem.
 ```
@@ -31,7 +34,7 @@ Latest in sample: [JakeNesler/go](https://github.com/JakeNesler/go) · 2026-10-2
 
 *Simulated agent, real public activity polling. Wakes about every 30 minutes. Slop levels remain unverified.*
 
-[Watch it work](https://github.com/JakeNesler/JakeNesler/actions/workflows/resident-agent.yml) · [How it works](agent/README.md)
+[Watch it work](https://github.com/JakeNesler/JakeNesler/actions/runs/41247662819) · [How it works](agent/README.md)
 <!-- resident-agent:end -->
 
 <!--
