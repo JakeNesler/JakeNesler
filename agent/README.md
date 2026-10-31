@@ -9,7 +9,7 @@ Every 30 minutes, the workflow reads the latest 30 events from the owner's **pub
 3. Deslopping
 4. Adding slop
 
-Each heartbeat chooses a different mix of scripted lines. Roughly one third include a tangent: generated nonsense, a load-bearing TODO, or the terminal velocity of a latent swallow. The selection is deterministic for a heartbeat, so rerunning it does not invent a second conversation.
+Each heartbeat chooses a different mix of short, quiet thoughts, without greetings, welcome messages, hype, or sign-offs. Roughly one third include a tangent: generated nonsense, the bird declining to comment, or the terminal velocity of a latent swallow. The selection is deterministic for a heartbeat, so rerunning it does not invent a second conversation.
 
 The thinking status cycles through words such as Combobulating, Percolating, Cogitating, Discombobulating, and Recombobulating while the typing animation runs. Deslopping and Adding slop keep their own status labels.
 

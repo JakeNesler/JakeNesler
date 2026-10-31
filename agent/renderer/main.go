@@ -258,36 +258,31 @@ func (a *animator) typeMessage(value, activity string, pause int) {
 }
 
 type dialogue struct {
-	Greeting, Welcome, Digging, Combobulating, Confident, Correction string
-	Deslopping, AddingSlop, Aftermath, Goodbye                       string
-	Tangent                                                          []string
+	Greeting, Digging, Combobulating, Confident, Correction string
+	Deslopping, AddingSlop                                  string
+	Tangent                                                 []string
 }
 
 func planDialogue(s state) dialogue {
 	rng := rand.New(rand.NewSource(s.UpdatedAt.Unix() + int64(s.Tick)*7919))
 	pick := func(lines ...string) string { return lines[rng.Intn(len(lines))] }
 	d := dialogue{
-		Greeting:      pick("oh, hey.", "hello. i was pretending to be busy.", "hi. please ignore the smoke."),
-		Welcome:       pick("welcome to jake's profile.", "make yourself at home. don't touch the YAML.", "you're just in time to watch this go sideways."),
-		Digging:       pick("i'm digging through the public activity feed.", "digging... the rabbit hole has a basement.", "digging... found another side project."),
-		Combobulating: pick("combobulating what i found...", "combobulating... the pieces are arguing.", "combobulating... one moment."),
-		Confident:     pick("this should only take a second.", "i have this under control.", "the plan is extremely normal."),
-		Correction:    pick("i have no useful estimate.", "i have opened another terminal.", "the plan has become a YAML file."),
-		Deslopping:    pick("deslopping...", "removing load-bearing slop.", "deslopping... this used to be a framework."),
-		AddingSlop:    pick("adding slop...", "adding the slop back. several things needed it.", "installing artisanal, locally sourced slop."),
-		Aftermath:     pick("hang on. that undid the previous step.", "the tests pass. they have lowered their standards.", "slop is now a transitive dependency."),
-		Goodbye:       pick("have a look around. i'll keep digging.", "anyway. i'll be here arguing with a semicolon.", "feel free to stay. this could take a while."),
+		Greeting:      pick("hm.", "...", "let's see."),
+		Digging:       pick("checking the public feed.", "looking through the recent activity.", "reading."),
+		Combobulating: pick("one moment.", "thinking.", "hm."),
+		Confident:     pick("i think...", "wait.", "maybe."),
+		Correction:    pick("no.", "not that.", "looking again."),
+		Deslopping:    "deslopping...",
+		AddingSlop:    "adding slop...",
 	}
 	// A tangent is occasional; routine updates still have different phrasing.
 	if rng.Intn(3) == 0 {
-		verb := pick("compiling", "defragmenting", "rebasing", "containerizing", "rotating")
-		object := pick("soup", "the load-bearing duck", "a haunted mutex", "the concept of Tuesday", "an emergency rubber chicken")
+		verb := pick("considering", "reconsidering", "measuring")
+		object := pick("soup", "a teaspoon", "a swallow")
 		tangents := [][]string{
-			{"what is the terminal velocity of a latent swallow?", "african or european embedding?", "right. i'll open an issue."},
-			{"consulting the ministry of silly tool calls.", "approval denied. walk was insufficiently silly."},
-			{"found a load-bearing TODO.", "leaving that one alone."},
-			{"the build is green.", "it has learned to lie."},
-			{"currently " + verb + " " + object + ".", "this is somehow in scope."},
+			{"what is the terminal velocity of a latent swallow?", "african or european?"},
+			{"the bird has declined to comment."},
+			{verb + " " + object + "."},
 		}
 		d.Tangent = tangents[rng.Intn(len(tangents))]
 	}
@@ -316,14 +311,13 @@ func animation(s state) *gif.GIF {
 	a.wordOffset = s.Tick % len(thinkingWords)
 	a.hold(60)
 	a.typeMessage(d.Greeting, "Digging", 100)
-	a.typeMessage(d.Welcome, "Digging", 120)
 	a.typeMessage(strings.ToLower(localPeriod(s.UpdatedAt))+" in scranton.", "Checking weather", 120)
 	a.typeMessage(weatherThought(s), "Checking weather", 180)
 	a.typeMessage(d.Digging, "Digging", 140)
 	if s.Snapshot.LatestRepo != "" {
-		a.typeMessage("latest stop: "+s.Snapshot.LatestRepo, "Digging", 180)
+		a.typeMessage("latest activity: "+s.Snapshot.LatestRepo, "Digging", 180)
 	} else {
-		a.typeMessage("quiet feed. i'll find something to overthink.", "Digging", 180)
+		a.typeMessage("no recent public activity.", "Digging", 180)
 	}
 	a.typeMessage(d.Combobulating, "Combobulating", 160)
 	a.typeMessage(d.Confident, "Combobulating", 90)
@@ -341,8 +335,8 @@ func animation(s state) *gif.GIF {
 	}
 	a.typeMessage(d.Deslopping, "Deslopping", 180)
 	a.typeMessage(d.AddingSlop, "Adding slop", 160)
-	a.typeMessage(d.Aftermath, "Adding slop", 180)
-	a.typeMessage(d.Goodbye, "Digging", 480)
+	a.activity = "Combobulating"
+	a.hold(1000)
 	return &a.gif
 }
 
