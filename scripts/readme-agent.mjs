@@ -1,6 +1,7 @@
 import { readFile, unlink, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { loadSnippet } from './public-code.mjs';
 
 export const START = '<!-- profile-terminal:start -->';
 export const END = '<!-- profile-terminal:end -->';
@@ -38,7 +39,8 @@ export function advance(previous, { now, runId, runUrl }) {
 }
 
 export function render(state, repository) {
-  return `![An animated NPC agent types idle thoughts beside a blinking pixel bird.](https://raw.githubusercontent.com/${repository}/main/agent/terminal-${state.tick}.gif)`;
+  const image = `![Agent types a real public code excerpt beside a blinking pixel bird.](https://raw.githubusercontent.com/${repository}/main/agent/terminal-${state.tick}.gif)`;
+  return state.snippet ? `[${image}](${state.snippet.url})` : image;
 }
 
 export async function main() {
@@ -59,6 +61,7 @@ export async function main() {
     now, runId,
     runUrl: runId ? `https://github.com/${repository}/actions/runs/${runId}` : null,
   });
+  if (state !== previous || !state.snippet) state.snippet = await loadSnippet(state.tick);
   const panel = render(state, repository);
   await writeFile('README.md', replacePanel(readme, panel));
   await writeFile('agent/state.json', JSON.stringify(state, null, 2) + '\n');

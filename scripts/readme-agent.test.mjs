@@ -23,6 +23,8 @@ test('cycles through all phases and bounds the journal over repeated updates', (
   assert.equal(state.tick, 19);
   assert.match(render(state, repository), /agent\/terminal-19\.gif/);
   assert.match(render(state, repository), /^!\[[^\n]*\]\(https:\/\/[^\n]*\)$/);
+  state.snippet = { url: 'https://github.com/example/public/blob/abc/sum.go#L3-L9' };
+  assert.match(render(state, repository), /^\[!\[[^\n]*\]\([^)]+\)\]\(https:\/\/github\.com\/example\/public\/blob\/abc\/sum\.go#L3-L9\)$/);
 });
 
 test('rerunning the same Actions run is idempotent', () => {

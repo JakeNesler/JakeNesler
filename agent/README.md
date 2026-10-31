@@ -1,21 +1,23 @@
-# The NPC in the README
+# The code terminal
 
-A small NPC idles in an animated terminal labeled `Agent:`. It types short thoughts, backspaces, pauses, and occasionally wanders into nonsense. A pixel bird blinks, bobs, and ducks during backspacing.
+The terminal labeled `Agent:` types real Go code excerpts from the public `JakeNesler/OpenProphet` and `Yscale-sh/yscale` repositories. It keeps the pixel bird, blinking cursor, and rotating thinking words. It does not generate or execute code.
 
-Thinking words cycle while the animation plays: Combobulating, Percolating, Cogitating, Discombobulating, Recombobulating, and others. Deslopping and Adding slop have their own moments. There are no greetings, hype, or sign-offs.
+Every 30 minutes, the workflow alternates repositories, selects an excerpt from a curated source-file allowlist, and generates a new GIF. Each excerpt preserves the source lines and records the repository, file, full commit SHA, and line range in `agent/state.json`. Click the terminal to open those exact lines on GitHub.
 
-Every 30 minutes, GitHub Actions advances the scene seed and regenerates the looping GIF. Each scene uses a deterministic mix of lines; roughly one third include an absurd tangent. Re-running the same successful Actions run preserves its scene. No model, external data feeds, or paid API is involved.
+Source requests are unauthenticated. Repository metadata must confirm that the exact allowlisted repository is public before code is fetched. A failed request fails the update and leaves the published scene intact. Re-running a successful run preserves its selected code.
 
-The README contains only the image and hidden update markers. The GIF plays without refreshing; newly generated scenes appear after a page refresh. Each scene has a versioned image filename so GitHub's image cache cannot serve the previous scene. The previous generated image is removed on the next update. Visitors who disable animated images see a static frame and descriptive alt text.
+The README also links three compiler changes confirmed merged into `golang/go`. Those links sit outside the terminal's update markers and survive scene updates.
 
-The renderer requires Go 1.27.3 or later. Actions resolves the latest stable Go for tests and rendering. The workflow commits only `README.md`, `agent/state.json`, and the generated `agent/terminal-<tick>.gif` using the built-in repository token.
+The GIF plays without refreshing; newly generated scenes appear after a page refresh. Each scene has a versioned image filename to avoid stale GitHub image caches. The previous generated image is removed on the next update. Visitors who disable animated images see a static frame and descriptive alt text.
+
+The renderer requires Go 1.27.3 or later. Actions resolves the latest stable Go for tests and rendering. The workflow commits only `README.md`, `agent/state.json`, and the generated `agent/terminal-<tick>.gif` using the built-in repository token. No model or paid API is involved.
 
 Run **Profile terminal → Run workflow** in Actions to refresh it manually. Change the schedule in `.github/workflows/profile-terminal.yml`, or disable that workflow to stop updates. Default-branch rules must allow the generated commits.
 
 Checks:
 
 ```sh
-node --test scripts/readme-agent.test.mjs
+node --test scripts/*.test.mjs
 (cd agent/renderer && go test ./... && go vet ./...)
 actionlint
 ```

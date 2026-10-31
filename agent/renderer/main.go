@@ -10,7 +10,6 @@ import (
 	"image/draw"
 	"image/gif"
 	"io"
-	"math/rand"
 	"os"
 	"path/filepath"
 	"strings"
@@ -35,6 +34,15 @@ var colors = color.Palette{
 type state struct {
 	Tick      int       `json:"tick"`
 	UpdatedAt time.Time `json:"updatedAt"`
+	Snippet   *snippet  `json:"snippet"`
+}
+
+type snippet struct {
+	Repository string   `json:"repository"`
+	Path       string   `json:"path"`
+	Commit     string   `json:"commit"`
+	StartLine  int      `json:"startLine"`
+	Lines      []string `json:"lines"`
 }
 
 type animator struct {
@@ -44,13 +52,15 @@ type animator struct {
 	activity   string
 	clock      int
 	wordOffset int
-	retracting bool
+	source     string
+	codeMode   bool
 }
 
 var thinkingWords = []string{
 	"Combobulating", "Percolating", "Cogitating", "Ruminating",
 	"Discombobulating", "Recombobulating", "Unfurling", "Bamboozling",
 	"Puttering", "Marinating", "Scampering", "Conjuring",
+	"Deslopping", "Adding slop",
 }
 
 func (a *animator) thinkingWord() string {
@@ -77,9 +87,6 @@ func (a *animator) bird(img *image.Paletted) {
 		"      y y       ",
 	}
 	x, y := 420, 7+(a.clock/60)%2
-	if a.retracting {
-		y += 2
-	}
 	blink := a.clock%400 >= 360
 	for row, pixels := range sprite {
 		for col, pixel := range pixels {
@@ -137,25 +144,43 @@ func (a *animator) screen(cursor bool) *image.Paletted {
 	text(img, 20, 27, "Agent:", 2)
 	a.bird(img)
 	draw.Draw(img, image.Rect(20, 43, 460, 44), image.NewUniform(colors[1]), image.Point{}, draw.Src)
+	top, rows := 75, 7
+	if a.codeMode {
+		source := a.source
+		if len(source) > 60 {
+			source = source[:57] + "..."
+		}
+		text(img, 20, 63, source, 3)
+		top, rows = 89, 6
+	}
 	var lines []string
 	for i, message := range a.messages {
-		if i > 0 {
+		if i > 0 && !a.codeMode {
 			lines = append(lines, "")
 		}
-		lines = append(lines, wrap(message)...)
+		lines = append(lines, wrap(strings.ReplaceAll(message, "\t", "    "))...)
 	}
-	if len(lines) > 7 {
-		lines = lines[len(lines)-7:]
+	if len(lines) > rows {
+		lines = lines[len(lines)-rows:]
 	}
 	for i, line := range lines {
 		ink := uint8(3)
-		if i == len(lines)-1 {
+		if a.codeMode || i == len(lines)-1 {
 			ink = 2
 		}
-		text(img, 34, 75+i*20, line, ink)
+		text(img, 34, top+i*20, line, ink)
+		if a.codeMode {
+			trimmed := strings.TrimLeft(line, " ")
+			for _, keyword := range []string{"func ", "return ", "if ", "for ", "switch ", "case "} {
+				if strings.HasPrefix(trimmed, keyword) {
+					text(img, 34+(len(line)-len(trimmed))*7, top+i*20, strings.TrimSpace(keyword), 4)
+					break
+				}
+			}
+		}
 	}
 	if len(lines) > 0 {
-		y := 75 + (len(lines)-1)*20
+		y := top + (len(lines)-1)*20
 		text(img, 20, y, ">", 4)
 		if cursor {
 			x := 35 + len(lines[len(lines)-1])*7
@@ -218,63 +243,20 @@ func (a *animator) typeMessage(value, activity string, pause int) {
 	a.hold(pause)
 }
 
-type dialogue struct {
-	Greeting, Idle, Combobulating, Confident, Correction string
-	Deslopping, AddingSlop                               string
-	Tangent                                              []string
-}
-
-func planDialogue(s state) dialogue {
-	rng := rand.New(rand.NewSource(s.UpdatedAt.Unix() + int64(s.Tick)*7919))
-	pick := func(lines ...string) string { return lines[rng.Intn(len(lines))] }
-	d := dialogue{
-		Greeting:      pick("hm.", "...", "let's see."),
-		Idle:          pick("looking around.", "watching the cursor.", "waiting for something to happen."),
-		Combobulating: pick("one moment.", "thinking.", "hm."),
-		Confident:     pick("i think...", "wait.", "maybe."),
-		Correction:    pick("no.", "not that.", "looking again."),
-		Deslopping:    "deslopping...",
-		AddingSlop:    "adding slop...",
-	}
-	// A tangent is occasional; routine updates still have different phrasing.
-	if rng.Intn(3) == 0 {
-		verb := pick("considering", "reconsidering", "measuring")
-		object := pick("soup", "a teaspoon", "a swallow")
-		tangents := [][]string{
-			{"what is the terminal velocity of a latent swallow?", "african or european?"},
-			{"the bird has declined to comment."},
-			{verb + " " + object + "."},
-		}
-		d.Tangent = tangents[rng.Intn(len(tangents))]
-	}
-	return d
-}
-
 func animation(s state) *gif.GIF {
-	d := planDialogue(s)
 	a := newAnimator()
 	a.wordOffset = s.Tick % len(thinkingWords)
+	a.codeMode = true
+	a.source = fmt.Sprintf("%s / %s:%d", filepath.Base(s.Snippet.Repository), filepath.Base(s.Snippet.Path), s.Snippet.StartLine)
 	a.hold(60)
-	a.typeMessage(d.Greeting, "Idling", 100)
-	a.typeMessage(d.Idle, "Idling", 300)
-	a.typeMessage(d.Combobulating, "Combobulating", 200)
-	a.typeMessage(d.Confident, "Combobulating", 180)
-	i := len(a.messages) - 1
-	a.retracting = true
-	for len(a.messages[i]) > 0 {
-		a.messages[i] = a.messages[i][:max(0, len(a.messages[i])-3)]
-		a.frame(6, true)
+	for _, line := range s.Snippet.Lines {
+		pause := 35
+		if strings.TrimSpace(line) == "}" {
+			pause = 90
+		}
+		a.typeMessage(line, "Reading", pause)
 	}
-	a.retracting = false
-	a.messages = a.messages[:i]
-	a.typeMessage(d.Correction, "Combobulating", 240)
-	for _, thought := range d.Tangent {
-		a.typeMessage(thought, "Reconsidering", 180)
-	}
-	a.typeMessage(d.Deslopping, "Deslopping", 200)
-	a.typeMessage(d.AddingSlop, "Adding slop", 200)
-	a.activity = "Combobulating"
-	a.hold(1200)
+	a.hold(1800)
 	return &a.gif
 }
 
@@ -292,6 +274,9 @@ func run(input string, output io.Writer) (int, error) {
 	}
 	if s.Tick < 0 {
 		return 0, fmt.Errorf("invalid scene counter")
+	}
+	if s.Snippet == nil || len(s.Snippet.Lines) == 0 || len(s.Snippet.Lines) > 16 || s.Snippet.StartLine < 1 {
+		return 0, fmt.Errorf("missing public code excerpt")
 	}
 	return s.Tick, gif.EncodeAll(output, animation(s))
 }

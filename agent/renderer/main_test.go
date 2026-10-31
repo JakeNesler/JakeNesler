@@ -7,7 +7,6 @@ import (
 	"image/gif"
 	"os"
 	"path/filepath"
-	"reflect"
 	"strings"
 	"testing"
 	"time"
@@ -15,6 +14,9 @@ import (
 
 func TestAnimationRoundTrip(t *testing.T) {
 	s := state{UpdatedAt: time.Date(2026, 10, 31, 22, 0, 0, 0, time.UTC)}
+	s.Snippet = &snippet{Repository: "example/public", Path: "sum.go", StartLine: 3, Lines: []string{
+		"func Sum(values []int) int {", "\ttotal := 0", "\tfor _, value := range values {", "\t\ttotal += value", "\t}", "\treturn total", "}",
+	}}
 	var encoded bytes.Buffer
 	if err := gif.EncodeAll(&encoded, animation(s)); err != nil {
 		t.Fatal(err)
@@ -84,27 +86,5 @@ func TestLongThoughtsFitThePanel(t *testing.T) {
 		if len(line) > 60 {
 			t.Fatalf("line overflows the panel: %q", line)
 		}
-	}
-}
-
-func TestDialogueVariesButRerendersDeterministically(t *testing.T) {
-	s := state{UpdatedAt: time.Date(2026, 10, 31, 22, 0, 0, 0, time.UTC)}
-	if !reflect.DeepEqual(planDialogue(s), planDialogue(s)) {
-		t.Fatal("rerendering one heartbeat changed its dialogue")
-	}
-	greetings := map[string]bool{}
-	tangents := 0
-	swallow := false
-	for i := 0; i < 200; i++ {
-		s.Tick = i
-		d := planDialogue(s)
-		greetings[d.Greeting] = true
-		if len(d.Tangent) > 0 {
-			tangents++
-			swallow = swallow || strings.Contains(d.Tangent[0], "latent swallow")
-		}
-	}
-	if len(greetings) < 2 || tangents == 0 || tangents == 200 || !swallow {
-		t.Fatalf("missing variety: greetings=%d tangents=%d swallow=%v", len(greetings), tangents, swallow)
 	}
 }
