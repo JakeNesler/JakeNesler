@@ -11,6 +11,10 @@ Every 30 minutes, the workflow reads the latest 30 events from the owner's **pub
 
 Each heartbeat chooses a different mix of scripted lines. Roughly one third include a tangent: generated nonsense, a load-bearing TODO, or the terminal velocity of a latent swallow. The selection is deterministic for a heartbeat, so rerunning it does not invent a second conversation.
 
+The thinking status cycles through words such as Combobulating, Percolating, Cogitating, Discombobulating, and Recombobulating while the typing animation runs. Deslopping and Adding slop keep their own status labels.
+
+A small pixel bird in the header blinks, bobs, and ducks down during backspacing. The sprite is drawn directly by the Go renderer with the terminal's existing palette.
+
 The animation includes the latest sampled public repository. It does not detect visitors, answer questions, or describe actual code changes. The public activity snapshot is real, but GitHub's events feed can lag. The README contains only the terminal image and hidden update markers.
 
 Scranton weather comes from [NWS station KAVP](https://api.weather.gov/stations/KAVP/observations/latest), at Wilkes-Barre/Scranton International Airport. Conditions are polled every heartbeat and temperatures use Fahrenheit. Missing temperature values are not treated as zero. Observations over three hours old are rejected; a failed poll retains the previous report with an unavailable label, or says the feed is unavailable if no report exists. Weather failures do not stop the animation.
