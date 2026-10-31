@@ -64,6 +64,13 @@ export function render(state, repository) {
 
 [![Resident agent](https://github.com/${repository}/actions/workflows/resident-agent.yml/badge.svg)](https://github.com/${repository}/actions/workflows/resident-agent.yml)
 
+![A simulated agent types a greeting, digs through public activity, combobulates, deslops, and adds slop.](agent/terminal.gif?heartbeat=${state.tick})
+
+*An animated, simulated agent. Public activity context refreshes about every 30 minutes.*
+
+<details>
+<summary>Latest heartbeat and notes</summary>
+
 \`\`\`text
 resident-agent ~ ${['◐', '◓', '◑', '◒'][phase]}
 
@@ -78,16 +85,11 @@ last heartbeat: ${time(state.updatedAt)}
 
 ${latest}
 
-<details>
-<summary>What has it been doing?</summary>
-
 \`\`\`text
 ${logs}
 \`\`\`
 
 </details>
-
-*Simulated agent, real public activity polling. Wakes about every 30 minutes. Slop levels remain unverified.*
 
 [Watch it work](${state.runUrl ?? `https://github.com/${repository}/actions/workflows/resident-agent.yml`}) · [How it works](agent/README.md)`;
 }

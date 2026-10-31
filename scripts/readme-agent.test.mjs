@@ -25,6 +25,8 @@ test('cycles through all phases and bounds the journal over repeated polls', () 
   assert.match(render(state, repository), /laps survived: 4/);
   assert.match(render(state, repository), /\[################\] 100%/);
   assert.match(render(state, repository), /actions\/runs\/19/);
+  assert.match(render(state, repository), /agent\/terminal\.gif\?heartbeat=19/);
+  assert.match(render(state, repository), /Latest heartbeat and notes/);
 });
 
 test('rerunning the same Actions run is idempotent', () => {
