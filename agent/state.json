@@ -1,9 +1,14 @@
 {
-  "tick": 13,
-  "runId": "41264276886",
-  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/41264276886",
-  "updatedAt": "2026-11-01T02:13:45.654Z",
+  "tick": 14,
+  "runId": "41294399558",
+  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/41294399558",
+  "updatedAt": "2026-11-01T09:44:35.902Z",
   "log": [
+    {
+      "at": "2026-11-01T09:44:35.902Z",
+      "activity": "Deslopping",
+      "thought": "..."
+    },
     {
       "at": "2026-11-01T02:13:45.654Z",
       "activity": "Combobulating",
@@ -28,30 +33,32 @@
       "at": "2026-10-31T23:18:24.132Z",
       "activity": "Combobulating",
       "thought": "Thinking."
-    },
-    {
-      "at": "2026-10-31T23:16:51.441Z",
-      "activity": "Percolating",
-      "thought": "Idling."
     }
   ],
   "snippet": {
-    "repository": "Yscale-sh/yscale",
-    "path": "central/internal/decider/placement.go",
-    "commit": "cba4622a00ddc2a82adeed62e54176ca3e7fb9a0",
-    "startLine": 409,
-    "endLine": 417,
+    "repository": "JakeNesler/OpenProphet",
+    "path": "services/technical_analysis.go",
+    "commit": "71801141fa9c6fb3dc64bd69bd31f9450dd63776",
+    "startLine": 248,
+    "endLine": 263,
     "lines": [
-      "func routeRefusalReason(err error) string {",
-      "\tswitch {",
-      "\tcase errors.Is(err, errGPUUnsupportedByBackend):",
-      "\t\treturn state.PlacementRejectGPUKindNotSupported",
-      "\tcase errors.Is(err, errUnknownBackend):",
-      "\t\treturn state.PlacementRejectProviderNotAllowed",
+      "func generateSignal(result *AnalysisResult) (string, float64) {",
+      "\tsignals := make(map[string]int)",
+      "\tconfidence := 0.0",
+      "",
+      "\t// Price vs SMA signals",
+      "\tif result.SMA20 > 0 {",
+      "\t\tif result.CurrentPrice > result.SMA20 {",
+      "\t\t\tsignals[\"buy\"]++",
+      "\t\t\tconfidence += 15",
+      "\t\t} else {",
+      "\t\t\tsignals[\"sell\"]++",
+      "\t\t\tconfidence += 15",
+      "\t\t}",
       "\t}",
-      "\treturn state.PlacementRejectProviderNotAllowed",
-      "}"
+      "",
+      "\tif result.SMA50 > 0 {"
     ],
-    "url": "https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/central/internal/decider/placement.go#L409-L417"
+    "url": "https://github.com/JakeNesler/OpenProphet/blob/71801141fa9c6fb3dc64bd69bd31f9450dd63776/services/technical_analysis.go#L248-L263"
   }
 }
