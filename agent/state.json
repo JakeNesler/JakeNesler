@@ -1,9 +1,14 @@
 {
-  "tick": 12,
-  "runId": "41252770374",
-  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/41252770374",
-  "updatedAt": "2026-10-31T23:30:40.624Z",
+  "tick": 13,
+  "runId": "41264276886",
+  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/41264276886",
+  "updatedAt": "2026-11-01T02:13:45.654Z",
   "log": [
+    {
+      "at": "2026-11-01T02:13:45.654Z",
+      "activity": "Combobulating",
+      "thought": "Thinking."
+    },
     {
       "at": "2026-10-31T23:30:40.624Z",
       "activity": "Percolating",
@@ -28,37 +33,25 @@
       "at": "2026-10-31T23:16:51.441Z",
       "activity": "Percolating",
       "thought": "Idling."
-    },
-    {
-      "at": "2026-10-31T23:12:28.707Z",
-      "activity": "Adding slop",
-      "thought": "..."
     }
   ],
   "snippet": {
-    "repository": "JakeNesler/OpenProphet",
-    "path": "services/technical_analysis.go",
-    "commit": "71801141fa9c6fb3dc64bd69bd31f9450dd63776",
-    "startLine": 217,
-    "endLine": 232,
+    "repository": "Yscale-sh/yscale",
+    "path": "central/internal/decider/placement.go",
+    "commit": "cba4622a00ddc2a82adeed62e54176ca3e7fb9a0",
+    "startLine": 409,
+    "endLine": 417,
     "lines": [
-      "func analyzeVolume(bars []*interfaces.Bar) *VolumeAnalysis {",
-      "\tif len(bars) < 20 {",
-      "\t\treturn nil",
+      "func routeRefusalReason(err error) string {",
+      "\tswitch {",
+      "\tcase errors.Is(err, errGPUUnsupportedByBackend):",
+      "\t\treturn state.PlacementRejectGPUKindNotSupported",
+      "\tcase errors.Is(err, errUnknownBackend):",
+      "\t\treturn state.PlacementRejectProviderNotAllowed",
       "\t}",
-      "",
-      "\tcurrentVolume := bars[len(bars)-1].Volume",
-      "",
-      "\t// Calculate average volume over last 20 bars",
-      "\tvolumeSum := int64(0)",
-      "\tfor i := len(bars) - 20; i < len(bars); i++ {",
-      "\t\tvolumeSum += bars[i].Volume",
-      "\t}",
-      "\tavgVolume := float64(volumeSum) / 20.0",
-      "",
-      "\tratio := float64(currentVolume) / avgVolume",
-      ""
+      "\treturn state.PlacementRejectProviderNotAllowed",
+      "}"
     ],
-    "url": "https://github.com/JakeNesler/OpenProphet/blob/71801141fa9c6fb3dc64bd69bd31f9450dd63776/services/technical_analysis.go#L217-L232"
+    "url": "https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/central/internal/decider/placement.go#L409-L417"
   }
 }
