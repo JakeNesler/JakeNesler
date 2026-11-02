@@ -1,9 +1,14 @@
 {
-  "tick": 18,
-  "runId": "41407794399",
-  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/41407794399",
-  "updatedAt": "2026-11-02T07:40:39.068Z",
+  "tick": 19,
+  "runId": "41491313502",
+  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/41491313502",
+  "updatedAt": "2026-11-02T17:27:37.660Z",
   "log": [
+    {
+      "at": "2026-11-02T17:27:37.660Z",
+      "activity": "Adding slop",
+      "thought": "..."
+    },
     {
       "at": "2026-11-02T07:40:39.068Z",
       "activity": "Deslopping",
@@ -28,37 +33,31 @@
       "at": "2026-11-01T09:44:35.902Z",
       "activity": "Deslopping",
       "thought": "..."
-    },
-    {
-      "at": "2026-11-01T02:13:45.654Z",
-      "activity": "Combobulating",
-      "thought": "Thinking."
     }
   ],
   "snippet": {
-    "repository": "JakeNesler/OpenProphet",
-    "path": "services/technical_analysis.go",
-    "commit": "71801141fa9c6fb3dc64bd69bd31f9450dd63776",
-    "startLine": 75,
-    "endLine": 90,
+    "repository": "Yscale-sh/yscale",
+    "path": "central/internal/decider/placement.go",
+    "commit": "cba4622a00ddc2a82adeed62e54176ca3e7fb9a0",
+    "startLine": 422,
+    "endLine": 436,
     "lines": [
-      "func CalculateRSI(bars []*interfaces.Bar, period int) float64 {",
-      "\tif len(bars) < period+1 {",
-      "\t\treturn 50.0 // neutral",
+      "func gpuAdmissionRefusalReason(err error, backend string, gpu *backends.GPUSpec) (string, bool) {",
+      "\tswitch {",
+      "\tcase errors.Is(err, errGPUPriceCapNotFinite):",
+      "\t\treturn \"\", false",
+      "\tcase errors.Is(err, errGPUPriceCapExceeded), errors.Is(err, errAWSGPUPriceUnverifiable):",
+      "\t\t// Both are the per-GPU ceiling refusing the placement: one because the",
+      "\t\t// resolved price is over it, the other because no price central trusts",
+      "\t\t// can prove it is under it.",
+      "\t\treturn state.PlacementRejectPriceAboveMaxHourly, true",
       "\t}",
-      "",
-      "\tgains := make([]float64, 0)",
-      "\tlosses := make([]float64, 0)",
-      "",
-      "\tstart := len(bars) - period - 1",
-      "\tfor i := start; i < len(bars)-1; i++ {",
-      "\t\tchange := bars[i+1].Close - bars[i].Close",
-      "\t\tif change > 0 {",
-      "\t\t\tgains = append(gains, change)",
-      "\t\t\tlosses = append(losses, 0)",
-      "\t\t} else {",
-      "\t\t\tgains = append(gains, 0)"
+      "\tif gpu == nil {",
+      "\t\treturn state.PlacementRejectSKUNotSupported, true",
+      "\t}",
+      "\treturn gpuShapeRejectionReason(backend, gpu), true",
+      "}"
     ],
-    "url": "https://github.com/JakeNesler/OpenProphet/blob/71801141fa9c6fb3dc64bd69bd31f9450dd63776/services/technical_analysis.go#L75-L90"
+    "url": "https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/central/internal/decider/placement.go#L422-L436"
   }
 }
