@@ -1,9 +1,14 @@
 {
-  "tick": 16,
-  "runId": "41350688103",
-  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/41350688103",
-  "updatedAt": "2026-11-01T21:11:30.588Z",
+  "tick": 17,
+  "runId": "41369005020",
+  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/41369005020",
+  "updatedAt": "2026-11-02T00:47:31.059Z",
   "log": [
+    {
+      "at": "2026-11-02T00:47:31.059Z",
+      "activity": "Combobulating",
+      "thought": "Thinking."
+    },
     {
       "at": "2026-11-01T21:11:30.588Z",
       "activity": "Percolating",
@@ -28,34 +33,31 @@
       "at": "2026-10-31T23:30:40.624Z",
       "activity": "Percolating",
       "thought": "Idling."
-    },
-    {
-      "at": "2026-10-31T23:28:05.222Z",
-      "activity": "Adding slop",
-      "thought": "..."
     }
   ],
   "snippet": {
-    "repository": "JakeNesler/OpenProphet",
-    "path": "services/technical_analysis.go",
-    "commit": "71801141fa9c6fb3dc64bd69bd31f9450dd63776",
-    "startLine": 60,
-    "endLine": 72,
+    "repository": "Yscale-sh/yscale",
+    "path": "agent/internal/agent/pending_pod_constraints.go",
+    "commit": "cba4622a00ddc2a82adeed62e54176ca3e7fb9a0",
+    "startLine": 86,
+    "endLine": 100,
     "lines": [
-      "func CalculateSMA(bars []*interfaces.Bar, period int) float64 {",
-      "\tif len(bars) < period {",
-      "\t\treturn 0",
+      "func knownBurstSelector(key string) bool {",
+      "\tswitch key {",
+      "\tcase workload.LabelBurstNode,",
+      "\t\tk8sv1.LabelNvidiaGPUPresent,",
+      "\t\tk8sv1.LabelGPUKind,",
+      "\t\tk8sv1.LabelGPUCount,",
+      "\t\tk8sv1.LabelProviderClass,",
+      "\t\tk8sv1.LabelRegion,",
+      "\t\tcorev1.LabelOSStable,",
+      "\t\tcorev1.LabelArchStable:",
+      "\t\treturn true",
+      "\tdefault:",
+      "\t\treturn false",
       "\t}",
-      "",
-      "\tsum := 0.0",
-      "\tstart := len(bars) - period",
-      "\tfor i := start; i < len(bars); i++ {",
-      "\t\tsum += bars[i].Close",
-      "\t}",
-      "",
-      "\treturn sum / float64(period)",
       "}"
     ],
-    "url": "https://github.com/JakeNesler/OpenProphet/blob/71801141fa9c6fb3dc64bd69bd31f9450dd63776/services/technical_analysis.go#L60-L72"
+    "url": "https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/agent/internal/agent/pending_pod_constraints.go#L86-L100"
   }
 }
