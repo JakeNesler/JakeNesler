@@ -1,9 +1,14 @@
 {
-  "tick": 19,
-  "runId": "41491313502",
-  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/41491313502",
-  "updatedAt": "2026-11-02T17:27:37.660Z",
+  "tick": 20,
+  "runId": "41549948796",
+  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/41549948796",
+  "updatedAt": "2026-11-03T00:03:16.492Z",
   "log": [
+    {
+      "at": "2026-11-03T00:03:16.492Z",
+      "activity": "Percolating",
+      "thought": "Idling."
+    },
     {
       "at": "2026-11-02T17:27:37.660Z",
       "activity": "Adding slop",
@@ -28,36 +33,32 @@
       "at": "2026-11-01T16:48:44.818Z",
       "activity": "Adding slop",
       "thought": "..."
-    },
-    {
-      "at": "2026-11-01T09:44:35.902Z",
-      "activity": "Deslopping",
-      "thought": "..."
     }
   ],
   "snippet": {
-    "repository": "Yscale-sh/yscale",
-    "path": "central/internal/decider/placement.go",
-    "commit": "cba4622a00ddc2a82adeed62e54176ca3e7fb9a0",
-    "startLine": 422,
-    "endLine": 436,
+    "repository": "JakeNesler/OpenProphet",
+    "path": "services/technical_analysis.go",
+    "commit": "71801141fa9c6fb3dc64bd69bd31f9450dd63776",
+    "startLine": 109,
+    "endLine": 124,
     "lines": [
-      "func gpuAdmissionRefusalReason(err error, backend string, gpu *backends.GPUSpec) (string, bool) {",
-      "\tswitch {",
-      "\tcase errors.Is(err, errGPUPriceCapNotFinite):",
-      "\t\treturn \"\", false",
-      "\tcase errors.Is(err, errGPUPriceCapExceeded), errors.Is(err, errAWSGPUPriceUnverifiable):",
-      "\t\t// Both are the per-GPU ceiling refusing the placement: one because the",
-      "\t\t// resolved price is over it, the other because no price central trusts",
-      "\t\t// can prove it is under it.",
-      "\t\treturn state.PlacementRejectPriceAboveMaxHourly, true",
+      "func CalculateMACD(bars []*interfaces.Bar) *MACDResult {",
+      "\tif len(bars) < 26 {",
+      "\t\treturn nil",
       "\t}",
-      "\tif gpu == nil {",
-      "\t\treturn state.PlacementRejectSKUNotSupported, true",
-      "\t}",
-      "\treturn gpuShapeRejectionReason(backend, gpu), true",
-      "}"
+      "",
+      "\tema12 := calculateEMA(bars, 12)",
+      "\tema26 := calculateEMA(bars, 26)",
+      "\tmacdLine := ema12 - ema26",
+      "",
+      "\t// For signal line, we'd need historical MACD values",
+      "\t// Simplified: use recent EMA as approximation",
+      "\tsignalLine := ema12 * 0.85 // simplified",
+      "",
+      "\treturn &MACDResult{",
+      "\t\tMACD:      macdLine,",
+      "\t\tSignal:    signalLine,"
     ],
-    "url": "https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/central/internal/decider/placement.go#L422-L436"
+    "url": "https://github.com/JakeNesler/OpenProphet/blob/71801141fa9c6fb3dc64bd69bd31f9450dd63776/services/technical_analysis.go#L109-L124"
   }
 }
