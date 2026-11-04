@@ -1,9 +1,14 @@
 {
-  "tick": 24,
-  "runId": "41796216012",
-  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/41796216012",
-  "updatedAt": "2026-11-04T08:00:59.738Z",
+  "tick": 25,
+  "runId": "41865913260",
+  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/41865913260",
+  "updatedAt": "2026-11-04T16:18:59.404Z",
   "log": [
+    {
+      "at": "2026-11-04T16:18:59.404Z",
+      "activity": "Combobulating",
+      "thought": "Thinking."
+    },
     {
       "at": "2026-11-04T08:00:59.738Z",
       "activity": "Percolating",
@@ -28,37 +33,32 @@
       "at": "2026-11-03T00:03:16.492Z",
       "activity": "Percolating",
       "thought": "Idling."
-    },
-    {
-      "at": "2026-11-02T17:27:37.660Z",
-      "activity": "Adding slop",
-      "thought": "..."
     }
   ],
   "snippet": {
-    "repository": "JakeNesler/OpenProphet",
-    "path": "services/technical_analysis.go",
-    "commit": "71801141fa9c6fb3dc64bd69bd31f9450dd63776",
-    "startLine": 182,
-    "endLine": 197,
+    "repository": "Yscale-sh/yscale",
+    "path": "central/internal/decider/placement.go",
+    "commit": "cba4622a00ddc2a82adeed62e54176ca3e7fb9a0",
+    "startLine": 443,
+    "endLine": 458,
     "lines": [
-      "func calculateEMA(bars []*interfaces.Bar, period int) float64 {",
-      "\tif len(bars) < period {",
-      "\t\treturn bars[len(bars)-1].Close",
+      "func gpuShapeRejectionReason(backend string, gpu *backends.GPUSpec) string {",
+      "\tmapGPU := gpuTypeMapperFor(backend)",
+      "\tif mapGPU == nil {",
+      "\t\treturn state.PlacementRejectGPUKindNotSupported",
       "\t}",
-      "",
-      "\tmultiplier := 2.0 / float64(period+1)",
-      "",
-      "\t// Start with SMA",
-      "\tema := CalculateSMA(bars[:period], period)",
-      "",
-      "\t// Calculate EMA for remaining bars",
-      "\tfor i := period; i < len(bars); i++ {",
-      "\t\tema = (bars[i].Close * multiplier) + (ema * (1 - multiplier))",
+      "\tif len(gpu.SKUs) > 0 {",
+      "\t\t// A pinned SKU is refused by every current backend: none launches",
+      "\t\t// GPUSpec.SKUs exactly, so pricing one and launching another is the",
+      "\t\t// failure this refusal exists to prevent.",
+      "\t\treturn state.PlacementRejectSKUNotSupported",
       "\t}",
-      "",
-      "\treturn ema"
+      "\tcount := max(1, gpu.Count)",
+      "\tif _, err := mapGPU(&backends.GPUSpec{Kind: gpu.Kind, Count: 1}); err != nil {",
+      "\t\treturn state.PlacementRejectGPUKindNotSupported",
+      "\t}",
+      "\tif _, err := mapGPU(&backends.GPUSpec{Kind: gpu.Kind, Count: count}); err != nil {"
     ],
-    "url": "https://github.com/JakeNesler/OpenProphet/blob/71801141fa9c6fb3dc64bd69bd31f9450dd63776/services/technical_analysis.go#L182-L197"
+    "url": "https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/central/internal/decider/placement.go#L443-L458"
   }
 }
