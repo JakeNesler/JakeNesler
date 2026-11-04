@@ -1,9 +1,14 @@
 {
-  "tick": 22,
-  "runId": "41717383875",
-  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/41717383875",
-  "updatedAt": "2026-11-03T20:58:24.000Z",
+  "tick": 23,
+  "runId": "41753368845",
+  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/41753368845",
+  "updatedAt": "2026-11-04T01:20:53.415Z",
   "log": [
+    {
+      "at": "2026-11-04T01:20:53.415Z",
+      "activity": "Adding slop",
+      "thought": "..."
+    },
     {
       "at": "2026-11-03T20:58:24.000Z",
       "activity": "Deslopping",
@@ -28,31 +33,32 @@
       "at": "2026-11-02T07:40:39.068Z",
       "activity": "Deslopping",
       "thought": "..."
-    },
-    {
-      "at": "2026-11-02T00:47:31.059Z",
-      "activity": "Combobulating",
-      "thought": "Thinking."
     }
   ],
   "snippet": {
-    "repository": "JakeNesler/OpenProphet",
-    "path": "services/technical_analysis.go",
-    "commit": "71801141fa9c6fb3dc64bd69bd31f9450dd63776",
-    "startLine": 171,
-    "endLine": 180,
+    "repository": "Yscale-sh/yscale",
+    "path": "agent/internal/agent/pending_pod_constraints.go",
+    "commit": "cba4622a00ddc2a82adeed62e54176ca3e7fb9a0",
+    "startLine": 102,
+    "endLine": 117,
     "lines": [
-      "func average(values []float64) float64 {",
-      "\tif len(values) == 0 {",
-      "\t\treturn 0",
-      "\t}",
-      "\tsum := 0.0",
-      "\tfor _, v := range values {",
-      "\t\tsum += v",
-      "\t}",
-      "\treturn sum / float64(len(values))",
-      "}"
+      "func supportedBurstSelector(key, value string, spec workload.Spec) bool {",
+      "\tswitch key {",
+      "\tcase workload.LabelBurstNode:",
+      "\t\treturn value == \"true\"",
+      "\tcase k8sv1.LabelNvidiaGPUPresent:",
+      "\t\treturn value == \"true\" && spec.GPU != nil",
+      "\tcase k8sv1.LabelGPUKind:",
+      "\t\treturn spec.GPU != nil && spec.GPU.Kind != \"\" && value == spec.GPU.Kind",
+      "\tcase k8sv1.LabelGPUCount:",
+      "\t\tif spec.GPU == nil {",
+      "\t\t\treturn false",
+      "\t\t}",
+      "\t\treturn value == k8sv1.GPUCountLabelValue(spec.GPU.Count)",
+      "\tcase k8sv1.LabelProviderClass:",
+      "\t\tbackend := strings.TrimSpace(spec.Backend)",
+      "\t\treturn backend != \"\" && backend != \"auto\" && value == backend"
     ],
-    "url": "https://github.com/JakeNesler/OpenProphet/blob/71801141fa9c6fb3dc64bd69bd31f9450dd63776/services/technical_analysis.go#L171-L180"
+    "url": "https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/agent/internal/agent/pending_pod_constraints.go#L102-L117"
   }
 }
