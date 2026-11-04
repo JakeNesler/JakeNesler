@@ -1,9 +1,14 @@
 {
-  "tick": 25,
-  "runId": "41865913260",
-  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/41865913260",
-  "updatedAt": "2026-11-04T16:18:59.404Z",
+  "tick": 26,
+  "runId": "41923294905",
+  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/41923294905",
+  "updatedAt": "2026-11-04T22:13:25.529Z",
   "log": [
+    {
+      "at": "2026-11-04T22:13:25.529Z",
+      "activity": "Deslopping",
+      "thought": "..."
+    },
     {
       "at": "2026-11-04T16:18:59.404Z",
       "activity": "Combobulating",
@@ -28,37 +33,32 @@
       "at": "2026-11-03T06:45:23.857Z",
       "activity": "Combobulating",
       "thought": "Thinking."
-    },
-    {
-      "at": "2026-11-03T00:03:16.492Z",
-      "activity": "Percolating",
-      "thought": "Idling."
     }
   ],
   "snippet": {
-    "repository": "Yscale-sh/yscale",
-    "path": "central/internal/decider/placement.go",
-    "commit": "cba4622a00ddc2a82adeed62e54176ca3e7fb9a0",
-    "startLine": 443,
-    "endLine": 458,
+    "repository": "JakeNesler/OpenProphet",
+    "path": "services/technical_analysis.go",
+    "commit": "71801141fa9c6fb3dc64bd69bd31f9450dd63776",
+    "startLine": 200,
+    "endLine": 215,
     "lines": [
-      "func gpuShapeRejectionReason(backend string, gpu *backends.GPUSpec) string {",
-      "\tmapGPU := gpuTypeMapperFor(backend)",
-      "\tif mapGPU == nil {",
-      "\t\treturn state.PlacementRejectGPUKindNotSupported",
+      "func calculateMomentum(bars []*interfaces.Bar) *MomentumResult {",
+      "\tif len(bars) < 6 {",
+      "\t\treturn nil",
       "\t}",
-      "\tif len(gpu.SKUs) > 0 {",
-      "\t\t// A pinned SKU is refused by every current backend: none launches",
-      "\t\t// GPUSpec.SKUs exactly, so pricing one and launching another is the",
-      "\t\t// failure this refusal exists to prevent.",
-      "\t\treturn state.PlacementRejectSKUNotSupported",
+      "",
+      "\tcurrent := bars[len(bars)-1].Close",
+      "\tday1 := bars[len(bars)-2].Close",
+      "\tday5 := bars[len(bars)-6].Close",
+      "",
+      "\treturn &MomentumResult{",
+      "\t\tPriceChange1D:   current - day1,",
+      "\t\tPriceChange5D:   current - day5,",
+      "\t\tPercentChange1D: ((current - day1) / day1) * 100,",
+      "\t\tPercentChange5D: ((current - day5) / day5) * 100,",
       "\t}",
-      "\tcount := max(1, gpu.Count)",
-      "\tif _, err := mapGPU(&backends.GPUSpec{Kind: gpu.Kind, Count: 1}); err != nil {",
-      "\t\treturn state.PlacementRejectGPUKindNotSupported",
-      "\t}",
-      "\tif _, err := mapGPU(&backends.GPUSpec{Kind: gpu.Kind, Count: count}); err != nil {"
+      "}"
     ],
-    "url": "https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/central/internal/decider/placement.go#L443-L458"
+    "url": "https://github.com/JakeNesler/OpenProphet/blob/71801141fa9c6fb3dc64bd69bd31f9450dd63776/services/technical_analysis.go#L200-L215"
   }
 }
