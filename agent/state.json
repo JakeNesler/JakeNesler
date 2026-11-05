@@ -1,9 +1,14 @@
 {
-  "tick": 28,
-  "runId": "42014337091",
-  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/42014337091",
-  "updatedAt": "2026-11-05T10:53:13.993Z",
+  "tick": 29,
+  "runId": "42087051302",
+  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/42087051302",
+  "updatedAt": "2026-11-05T18:44:24.675Z",
   "log": [
+    {
+      "at": "2026-11-05T18:44:24.675Z",
+      "activity": "Combobulating",
+      "thought": "Thinking."
+    },
     {
       "at": "2026-11-05T10:53:13.993Z",
       "activity": "Percolating",
@@ -28,37 +33,32 @@
       "at": "2026-11-04T08:00:59.738Z",
       "activity": "Percolating",
       "thought": "Idling."
-    },
-    {
-      "at": "2026-11-04T01:20:53.415Z",
-      "activity": "Adding slop",
-      "thought": "..."
     }
   ],
   "snippet": {
-    "repository": "JakeNesler/OpenProphet",
-    "path": "services/technical_analysis.go",
-    "commit": "71801141fa9c6fb3dc64bd69bd31f9450dd63776",
-    "startLine": 217,
-    "endLine": 232,
+    "repository": "Yscale-sh/yscale",
+    "path": "agent/internal/agent/pending_pod_constraints.go",
+    "commit": "cba4622a00ddc2a82adeed62e54176ca3e7fb9a0",
+    "startLine": 24,
+    "endLine": 39,
     "lines": [
-      "func analyzeVolume(bars []*interfaces.Bar) *VolumeAnalysis {",
-      "\tif len(bars) < 20 {",
-      "\t\treturn nil",
+      "func pendingPodConstraintRejection(pod *corev1.Pod, spec workload.Spec) string {",
+      "\tif pod.Spec.NodeName != \"\" {",
+      "\t\treturn pendingPodRejectUnsupportedNodeName",
       "\t}",
-      "",
-      "\tcurrentVolume := bars[len(bars)-1].Volume",
-      "",
-      "\t// Calculate average volume over last 20 bars",
-      "\tvolumeSum := int64(0)",
-      "\tfor i := len(bars) - 20; i < len(bars); i++ {",
-      "\t\tvolumeSum += bars[i].Volume",
+      "\tif !toleratesBurstNode(pod.Spec.Tolerations) {",
+      "\t\treturn pendingPodRejectMissingBurstToleration",
       "\t}",
-      "\tavgVolume := float64(volumeSum) / 20.0",
-      "",
-      "\tratio := float64(currentVolume) / avgVolume",
-      ""
+      "\tif hasRequiredAffinity(pod.Spec.Affinity) {",
+      "\t\treturn pendingPodRejectUnsupportedAffinity",
+      "\t}",
+      "\tkeys := make([]string, 0, len(pod.Spec.NodeSelector))",
+      "\tfor key := range pod.Spec.NodeSelector {",
+      "\t\tkeys = append(keys, key)",
+      "\t}",
+      "\tsort.Strings(keys)",
+      "\tfor _, key := range keys {"
     ],
-    "url": "https://github.com/JakeNesler/OpenProphet/blob/71801141fa9c6fb3dc64bd69bd31f9450dd63776/services/technical_analysis.go#L217-L232"
+    "url": "https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/agent/internal/agent/pending_pod_constraints.go#L24-L39"
   }
 }
