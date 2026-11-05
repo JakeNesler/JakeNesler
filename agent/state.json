@@ -1,9 +1,14 @@
 {
-  "tick": 26,
-  "runId": "41923294905",
-  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/41923294905",
-  "updatedAt": "2026-11-04T22:13:25.529Z",
+  "tick": 27,
+  "runId": "41957541777",
+  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/41957541777",
+  "updatedAt": "2026-11-05T02:48:33.079Z",
   "log": [
+    {
+      "at": "2026-11-05T02:48:33.079Z",
+      "activity": "Adding slop",
+      "thought": "..."
+    },
     {
       "at": "2026-11-04T22:13:25.529Z",
       "activity": "Deslopping",
@@ -28,37 +33,22 @@
       "at": "2026-11-03T20:58:24.000Z",
       "activity": "Deslopping",
       "thought": "..."
-    },
-    {
-      "at": "2026-11-03T06:45:23.857Z",
-      "activity": "Combobulating",
-      "thought": "Thinking."
     }
   ],
   "snippet": {
-    "repository": "JakeNesler/OpenProphet",
-    "path": "services/technical_analysis.go",
-    "commit": "71801141fa9c6fb3dc64bd69bd31f9450dd63776",
-    "startLine": 200,
-    "endLine": 215,
+    "repository": "Yscale-sh/yscale",
+    "path": "central/internal/cost/composite_source.go",
+    "commit": "cba4622a00ddc2a82adeed62e54176ca3e7fb9a0",
+    "startLine": 50,
+    "endLine": 55,
     "lines": [
-      "func calculateMomentum(bars []*interfaces.Bar) *MomentumResult {",
-      "\tif len(bars) < 6 {",
-      "\t\treturn nil",
-      "\t}",
-      "",
-      "\tcurrent := bars[len(bars)-1].Close",
-      "\tday1 := bars[len(bars)-2].Close",
-      "\tday5 := bars[len(bars)-6].Close",
-      "",
-      "\treturn &MomentumResult{",
-      "\t\tPriceChange1D:   current - day1,",
-      "\t\tPriceChange5D:   current - day5,",
-      "\t\tPercentChange1D: ((current - day1) / day1) * 100,",
-      "\t\tPercentChange5D: ((current - day5) / day5) * 100,",
+      "func NewCompositeSource(state StateProvisioningSource, lifecycle LifecycleSource) *CompositeSource {",
+      "\treturn &CompositeSource{",
+      "\t\tstate:     state,",
+      "\t\tlifecycle: lifecycle,",
       "\t}",
       "}"
     ],
-    "url": "https://github.com/JakeNesler/OpenProphet/blob/71801141fa9c6fb3dc64bd69bd31f9450dd63776/services/technical_analysis.go#L200-L215"
+    "url": "https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/central/internal/cost/composite_source.go#L50-L55"
   }
 }
