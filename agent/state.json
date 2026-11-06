@@ -1,9 +1,14 @@
 {
-  "tick": 31,
-  "runId": "42180707871",
-  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/42180707871",
-  "updatedAt": "2026-11-06T07:25:14.795Z",
+  "tick": 32,
+  "runId": "42242586051",
+  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/42242586051",
+  "updatedAt": "2026-11-06T15:25:25.413Z",
   "log": [
+    {
+      "at": "2026-11-06T15:25:25.413Z",
+      "activity": "Percolating",
+      "thought": "Idling."
+    },
     {
       "at": "2026-11-06T07:25:14.795Z",
       "activity": "Adding slop",
@@ -28,30 +33,29 @@
       "at": "2026-11-05T02:48:33.079Z",
       "activity": "Adding slop",
       "thought": "..."
-    },
-    {
-      "at": "2026-11-04T22:13:25.529Z",
-      "activity": "Deslopping",
-      "thought": "..."
     }
   ],
   "snippet": {
-    "repository": "Yscale-sh/yscale",
-    "path": "central/internal/decider/placement.go",
-    "commit": "cba4622a00ddc2a82adeed62e54176ca3e7fb9a0",
-    "startLine": 474,
-    "endLine": 482,
+    "repository": "JakeNesler/OpenProphet",
+    "path": "services/technical_analysis.go",
+    "commit": "71801141fa9c6fb3dc64bd69bd31f9450dd63776",
+    "startLine": 60,
+    "endLine": 72,
     "lines": [
-      "func gpuTypeMapperFor(backend string) func(*backends.GPUSpec) (string, error) {",
-      "\tswitch backend {",
-      "\tcase backends.TypeLinode:",
-      "\t\treturn linode.MapGPUType",
-      "\tcase backends.TypeAWS:",
-      "\t\treturn aws.MapGPUType",
+      "func CalculateSMA(bars []*interfaces.Bar, period int) float64 {",
+      "\tif len(bars) < period {",
+      "\t\treturn 0",
       "\t}",
-      "\treturn nil",
+      "",
+      "\tsum := 0.0",
+      "\tstart := len(bars) - period",
+      "\tfor i := start; i < len(bars); i++ {",
+      "\t\tsum += bars[i].Close",
+      "\t}",
+      "",
+      "\treturn sum / float64(period)",
       "}"
     ],
-    "url": "https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/central/internal/decider/placement.go#L474-L482"
+    "url": "https://github.com/JakeNesler/OpenProphet/blob/71801141fa9c6fb3dc64bd69bd31f9450dd63776/services/technical_analysis.go#L60-L72"
   }
 }
