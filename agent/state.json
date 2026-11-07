@@ -1,9 +1,14 @@
 {
-  "tick": 37,
-  "runId": "42402934602",
-  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/42402934602",
-  "updatedAt": "2026-11-07T18:46:51.023Z",
+  "tick": 38,
+  "runId": "42422012281",
+  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/42422012281",
+  "updatedAt": "2026-11-07T22:44:53.470Z",
   "log": [
+    {
+      "at": "2026-11-07T22:44:53.470Z",
+      "activity": "Deslopping",
+      "thought": "..."
+    },
     {
       "at": "2026-11-07T18:46:51.023Z",
       "activity": "Combobulating",
@@ -28,37 +33,26 @@
       "at": "2026-11-06T21:04:46.240Z",
       "activity": "Combobulating",
       "thought": "Thinking."
-    },
-    {
-      "at": "2026-11-06T15:25:25.413Z",
-      "activity": "Percolating",
-      "thought": "Idling."
     }
   ],
   "snippet": {
-    "repository": "Yscale-sh/yscale",
-    "path": "central/internal/decider/placement.go",
-    "commit": "cba4622a00ddc2a82adeed62e54176ca3e7fb9a0",
-    "startLine": 267,
-    "endLine": 282,
+    "repository": "JakeNesler/OpenProphet",
+    "path": "services/technical_analysis.go",
+    "commit": "3614481088b26ecd0c823272e826da27428dbcf3",
+    "startLine": 171,
+    "endLine": 180,
     "lines": [
-      "func (d *Decider) defaultPlacementRegion(backend string) string {",
-      "\tswitch backend {",
-      "\tcase backends.TypeFlyIO:",
-      "\t\tif d.cfg.FlyRegion != \"\" {",
-      "\t\t\treturn d.cfg.FlyRegion",
-      "\t\t}",
-      "\t\treturn \"ord\"",
-      "\tcase backends.TypeAWS:",
-      "\t\tif d.cfg.AWSRegion != \"\" {",
-      "\t\t\treturn d.cfg.AWSRegion",
-      "\t\t}",
-      "\t\treturn \"us-east-1\"",
-      "\tcase backends.TypeGCP:",
-      "\t\treturn d.gcpRegion",
-      "\tcase backends.TypeAzure:",
-      "\t\tif d.cfg.AzureLocation != \"\" {"
+      "func average(values []float64) float64 {",
+      "\tif len(values) == 0 {",
+      "\t\treturn 0",
+      "\t}",
+      "\tsum := 0.0",
+      "\tfor _, v := range values {",
+      "\t\tsum += v",
+      "\t}",
+      "\treturn sum / float64(len(values))",
+      "}"
     ],
-    "url": "https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/central/internal/decider/placement.go#L267-L282"
+    "url": "https://github.com/JakeNesler/OpenProphet/blob/3614481088b26ecd0c823272e826da27428dbcf3/services/technical_analysis.go#L171-L180"
   }
 }
