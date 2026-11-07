@@ -1,9 +1,14 @@
 {
-  "tick": 35,
-  "runId": "42349996695",
-  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/42349996695",
-  "updatedAt": "2026-11-07T07:08:49.510Z",
+  "tick": 36,
+  "runId": "42379610918",
+  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/42379610918",
+  "updatedAt": "2026-11-07T14:01:45.377Z",
   "log": [
+    {
+      "at": "2026-11-07T14:01:45.377Z",
+      "activity": "Percolating",
+      "thought": "Idling."
+    },
     {
       "at": "2026-11-07T07:08:49.510Z",
       "activity": "Adding slop",
@@ -28,37 +33,32 @@
       "at": "2026-11-06T07:25:14.795Z",
       "activity": "Adding slop",
       "thought": "..."
-    },
-    {
-      "at": "2026-11-06T00:15:40.407Z",
-      "activity": "Deslopping",
-      "thought": "..."
     }
   ],
   "snippet": {
-    "repository": "Yscale-sh/yscale",
-    "path": "agent/internal/agent/pending_pod_constraints.go",
-    "commit": "cba4622a00ddc2a82adeed62e54176ca3e7fb9a0",
-    "startLine": 51,
-    "endLine": 66,
+    "repository": "JakeNesler/OpenProphet",
+    "path": "services/technical_analysis.go",
+    "commit": "71801141fa9c6fb3dc64bd69bd31f9450dd63776",
+    "startLine": 109,
+    "endLine": 124,
     "lines": [
-      "func toleratesBurstNode(tolerations []corev1.Toleration) bool {",
-      "\tfor _, toleration := range tolerations {",
-      "\t\tif toleration.Key != workload.LabelBurstNode ||",
-      "\t\t\t(toleration.Effect != \"\" && toleration.Effect != corev1.TaintEffectNoSchedule) {",
-      "\t\t\tcontinue",
-      "\t\t}",
-      "\t\tswitch toleration.Operator {",
-      "\t\tcase corev1.TolerationOpExists:",
-      "\t\t\treturn true",
-      "\t\tcase \"\", corev1.TolerationOpEqual:",
-      "\t\t\tif toleration.Value == \"true\" {",
-      "\t\t\t\treturn true",
-      "\t\t\t}",
-      "\t\t}",
+      "func CalculateMACD(bars []*interfaces.Bar) *MACDResult {",
+      "\tif len(bars) < 26 {",
+      "\t\treturn nil",
       "\t}",
-      "\treturn false"
+      "",
+      "\tema12 := calculateEMA(bars, 12)",
+      "\tema26 := calculateEMA(bars, 26)",
+      "\tmacdLine := ema12 - ema26",
+      "",
+      "\t// For signal line, we'd need historical MACD values",
+      "\t// Simplified: use recent EMA as approximation",
+      "\tsignalLine := ema12 * 0.85 // simplified",
+      "",
+      "\treturn &MACDResult{",
+      "\t\tMACD:      macdLine,",
+      "\t\tSignal:    signalLine,"
     ],
-    "url": "https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/agent/internal/agent/pending_pod_constraints.go#L51-L66"
+    "url": "https://github.com/JakeNesler/OpenProphet/blob/71801141fa9c6fb3dc64bd69bd31f9450dd63776/services/technical_analysis.go#L109-L124"
   }
 }
