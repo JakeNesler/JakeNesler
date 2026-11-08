@@ -1,9 +1,14 @@
 {
-  "tick": 41,
-  "runId": "42499375570",
-  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/42499375570",
-  "updatedAt": "2026-11-08T16:20:45.046Z",
+  "tick": 42,
+  "runId": "42521792629",
+  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/42521792629",
+  "updatedAt": "2026-11-08T20:46:31.169Z",
   "log": [
+    {
+      "at": "2026-11-08T20:46:31.169Z",
+      "activity": "Deslopping",
+      "thought": "..."
+    },
     {
       "at": "2026-11-08T16:20:45.046Z",
       "activity": "Combobulating",
@@ -28,36 +33,32 @@
       "at": "2026-11-07T18:46:51.023Z",
       "activity": "Combobulating",
       "thought": "Thinking."
-    },
-    {
-      "at": "2026-11-07T14:01:45.377Z",
-      "activity": "Percolating",
-      "thought": "Idling."
     }
   ],
   "snippet": {
-    "repository": "Yscale-sh/yscale",
-    "path": "agent/internal/agent/pending_pod_constraints.go",
-    "commit": "cba4622a00ddc2a82adeed62e54176ca3e7fb9a0",
-    "startLine": 86,
-    "endLine": 100,
+    "repository": "JakeNesler/OpenProphet",
+    "path": "services/technical_analysis.go",
+    "commit": "3614481088b26ecd0c823272e826da27428dbcf3",
+    "startLine": 200,
+    "endLine": 215,
     "lines": [
-      "func knownBurstSelector(key string) bool {",
-      "\tswitch key {",
-      "\tcase workload.LabelBurstNode,",
-      "\t\tk8sv1.LabelNvidiaGPUPresent,",
-      "\t\tk8sv1.LabelGPUKind,",
-      "\t\tk8sv1.LabelGPUCount,",
-      "\t\tk8sv1.LabelProviderClass,",
-      "\t\tk8sv1.LabelRegion,",
-      "\t\tcorev1.LabelOSStable,",
-      "\t\tcorev1.LabelArchStable:",
-      "\t\treturn true",
-      "\tdefault:",
-      "\t\treturn false",
+      "func calculateMomentum(bars []*interfaces.Bar) *MomentumResult {",
+      "\tif len(bars) < 6 {",
+      "\t\treturn nil",
+      "\t}",
+      "",
+      "\tcurrent := bars[len(bars)-1].Close",
+      "\tday1 := bars[len(bars)-2].Close",
+      "\tday5 := bars[len(bars)-6].Close",
+      "",
+      "\treturn &MomentumResult{",
+      "\t\tPriceChange1D:   current - day1,",
+      "\t\tPriceChange5D:   current - day5,",
+      "\t\tPercentChange1D: ((current - day1) / day1) * 100,",
+      "\t\tPercentChange5D: ((current - day5) / day5) * 100,",
       "\t}",
       "}"
     ],
-    "url": "https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/agent/internal/agent/pending_pod_constraints.go#L86-L100"
+    "url": "https://github.com/JakeNesler/OpenProphet/blob/3614481088b26ecd0c823272e826da27428dbcf3/services/technical_analysis.go#L200-L215"
   }
 }
