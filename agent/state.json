@@ -1,9 +1,14 @@
 {
-  "tick": 48,
-  "runId": "42868721520",
-  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/42868721520",
-  "updatedAt": "2026-11-10T17:48:59.561Z",
+  "tick": 49,
+  "runId": "42922254705",
+  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/42922254705",
+  "updatedAt": "2026-11-10T23:18:53.685Z",
   "log": [
+    {
+      "at": "2026-11-10T23:18:53.685Z",
+      "activity": "Combobulating",
+      "thought": "Thinking."
+    },
     {
       "at": "2026-11-10T17:48:59.561Z",
       "activity": "Percolating",
@@ -28,34 +33,25 @@
       "at": "2026-11-09T07:58:15.052Z",
       "activity": "Percolating",
       "thought": "Idling."
-    },
-    {
-      "at": "2026-11-09T00:53:52.452Z",
-      "activity": "Adding slop",
-      "thought": "..."
     }
   ],
   "snippet": {
-    "repository": "JakeNesler/OpenProphet",
-    "path": "services/technical_analysis.go",
-    "commit": "3614481088b26ecd0c823272e826da27428dbcf3",
-    "startLine": 60,
-    "endLine": 72,
+    "repository": "Yscale-sh/yscale",
+    "path": "central/internal/decider/placement.go",
+    "commit": "cba4622a00ddc2a82adeed62e54176ca3e7fb9a0",
+    "startLine": 409,
+    "endLine": 417,
     "lines": [
-      "func CalculateSMA(bars []*interfaces.Bar, period int) float64 {",
-      "\tif len(bars) < period {",
-      "\t\treturn 0",
+      "func routeRefusalReason(err error) string {",
+      "\tswitch {",
+      "\tcase errors.Is(err, errGPUUnsupportedByBackend):",
+      "\t\treturn state.PlacementRejectGPUKindNotSupported",
+      "\tcase errors.Is(err, errUnknownBackend):",
+      "\t\treturn state.PlacementRejectProviderNotAllowed",
       "\t}",
-      "",
-      "\tsum := 0.0",
-      "\tstart := len(bars) - period",
-      "\tfor i := start; i < len(bars); i++ {",
-      "\t\tsum += bars[i].Close",
-      "\t}",
-      "",
-      "\treturn sum / float64(period)",
+      "\treturn state.PlacementRejectProviderNotAllowed",
       "}"
     ],
-    "url": "https://github.com/JakeNesler/OpenProphet/blob/3614481088b26ecd0c823272e826da27428dbcf3/services/technical_analysis.go#L60-L72"
+    "url": "https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/central/internal/decider/placement.go#L409-L417"
   }
 }
