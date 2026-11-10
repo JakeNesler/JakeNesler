@@ -1,9 +1,14 @@
 {
-  "tick": 46,
-  "runId": "42740420669",
-  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/42740420669",
-  "updatedAt": "2026-11-10T02:06:51.387Z",
+  "tick": 47,
+  "runId": "42793649791",
+  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/42793649791",
+  "updatedAt": "2026-11-10T09:47:56.607Z",
   "log": [
+    {
+      "at": "2026-11-10T09:47:56.607Z",
+      "activity": "Adding slop",
+      "thought": "..."
+    },
     {
       "at": "2026-11-10T02:06:51.387Z",
       "activity": "Deslopping",
@@ -28,37 +33,32 @@
       "at": "2026-11-08T20:46:31.169Z",
       "activity": "Deslopping",
       "thought": "..."
-    },
-    {
-      "at": "2026-11-08T16:20:45.046Z",
-      "activity": "Combobulating",
-      "thought": "Thinking."
     }
   ],
   "snippet": {
-    "repository": "JakeNesler/OpenProphet",
-    "path": "services/technical_analysis.go",
-    "commit": "3614481088b26ecd0c823272e826da27428dbcf3",
-    "startLine": 248,
-    "endLine": 263,
+    "repository": "Yscale-sh/yscale",
+    "path": "agent/internal/agent/pending_pod_constraints.go",
+    "commit": "cba4622a00ddc2a82adeed62e54176ca3e7fb9a0",
+    "startLine": 102,
+    "endLine": 117,
     "lines": [
-      "func generateSignal(result *AnalysisResult) (string, float64) {",
-      "\tsignals := make(map[string]int)",
-      "\tconfidence := 0.0",
-      "",
-      "\t// Price vs SMA signals",
-      "\tif result.SMA20 > 0 {",
-      "\t\tif result.CurrentPrice > result.SMA20 {",
-      "\t\t\tsignals[\"buy\"]++",
-      "\t\t\tconfidence += 15",
-      "\t\t} else {",
-      "\t\t\tsignals[\"sell\"]++",
-      "\t\t\tconfidence += 15",
+      "func supportedBurstSelector(key, value string, spec workload.Spec) bool {",
+      "\tswitch key {",
+      "\tcase workload.LabelBurstNode:",
+      "\t\treturn value == \"true\"",
+      "\tcase k8sv1.LabelNvidiaGPUPresent:",
+      "\t\treturn value == \"true\" && spec.GPU != nil",
+      "\tcase k8sv1.LabelGPUKind:",
+      "\t\treturn spec.GPU != nil && spec.GPU.Kind != \"\" && value == spec.GPU.Kind",
+      "\tcase k8sv1.LabelGPUCount:",
+      "\t\tif spec.GPU == nil {",
+      "\t\t\treturn false",
       "\t\t}",
-      "\t}",
-      "",
-      "\tif result.SMA50 > 0 {"
+      "\t\treturn value == k8sv1.GPUCountLabelValue(spec.GPU.Count)",
+      "\tcase k8sv1.LabelProviderClass:",
+      "\t\tbackend := strings.TrimSpace(spec.Backend)",
+      "\t\treturn backend != \"\" && backend != \"auto\" && value == backend"
     ],
-    "url": "https://github.com/JakeNesler/OpenProphet/blob/3614481088b26ecd0c823272e826da27428dbcf3/services/technical_analysis.go#L248-L263"
+    "url": "https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/agent/internal/agent/pending_pod_constraints.go#L102-L117"
   }
 }
