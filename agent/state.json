@@ -1,9 +1,14 @@
 {
-  "tick": 47,
-  "runId": "42793649791",
-  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/42793649791",
-  "updatedAt": "2026-11-10T09:47:56.607Z",
+  "tick": 48,
+  "runId": "42868721520",
+  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/42868721520",
+  "updatedAt": "2026-11-10T17:48:59.561Z",
   "log": [
+    {
+      "at": "2026-11-10T17:48:59.561Z",
+      "activity": "Percolating",
+      "thought": "Idling."
+    },
     {
       "at": "2026-11-10T09:47:56.607Z",
       "activity": "Adding slop",
@@ -28,37 +33,29 @@
       "at": "2026-11-09T00:53:52.452Z",
       "activity": "Adding slop",
       "thought": "..."
-    },
-    {
-      "at": "2026-11-08T20:46:31.169Z",
-      "activity": "Deslopping",
-      "thought": "..."
     }
   ],
   "snippet": {
-    "repository": "Yscale-sh/yscale",
-    "path": "agent/internal/agent/pending_pod_constraints.go",
-    "commit": "cba4622a00ddc2a82adeed62e54176ca3e7fb9a0",
-    "startLine": 102,
-    "endLine": 117,
+    "repository": "JakeNesler/OpenProphet",
+    "path": "services/technical_analysis.go",
+    "commit": "3614481088b26ecd0c823272e826da27428dbcf3",
+    "startLine": 60,
+    "endLine": 72,
     "lines": [
-      "func supportedBurstSelector(key, value string, spec workload.Spec) bool {",
-      "\tswitch key {",
-      "\tcase workload.LabelBurstNode:",
-      "\t\treturn value == \"true\"",
-      "\tcase k8sv1.LabelNvidiaGPUPresent:",
-      "\t\treturn value == \"true\" && spec.GPU != nil",
-      "\tcase k8sv1.LabelGPUKind:",
-      "\t\treturn spec.GPU != nil && spec.GPU.Kind != \"\" && value == spec.GPU.Kind",
-      "\tcase k8sv1.LabelGPUCount:",
-      "\t\tif spec.GPU == nil {",
-      "\t\t\treturn false",
-      "\t\t}",
-      "\t\treturn value == k8sv1.GPUCountLabelValue(spec.GPU.Count)",
-      "\tcase k8sv1.LabelProviderClass:",
-      "\t\tbackend := strings.TrimSpace(spec.Backend)",
-      "\t\treturn backend != \"\" && backend != \"auto\" && value == backend"
+      "func CalculateSMA(bars []*interfaces.Bar, period int) float64 {",
+      "\tif len(bars) < period {",
+      "\t\treturn 0",
+      "\t}",
+      "",
+      "\tsum := 0.0",
+      "\tstart := len(bars) - period",
+      "\tfor i := start; i < len(bars); i++ {",
+      "\t\tsum += bars[i].Close",
+      "\t}",
+      "",
+      "\treturn sum / float64(period)",
+      "}"
     ],
-    "url": "https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/agent/internal/agent/pending_pod_constraints.go#L102-L117"
+    "url": "https://github.com/JakeNesler/OpenProphet/blob/3614481088b26ecd0c823272e826da27428dbcf3/services/technical_analysis.go#L60-L72"
   }
 }
