@@ -1,9 +1,14 @@
 {
-  "tick": 52,
-  "runId": "43080129627",
-  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/43080129627",
-  "updatedAt": "2026-11-11T18:41:47.183Z",
+  "tick": 53,
+  "runId": "43131592799",
+  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/43131592799",
+  "updatedAt": "2026-11-12T01:02:17.193Z",
   "log": [
+    {
+      "at": "2026-11-12T01:02:17.193Z",
+      "activity": "Combobulating",
+      "thought": "Thinking."
+    },
     {
       "at": "2026-11-11T18:41:47.183Z",
       "activity": "Percolating",
@@ -28,37 +33,32 @@
       "at": "2026-11-10T17:48:59.561Z",
       "activity": "Percolating",
       "thought": "Idling."
-    },
-    {
-      "at": "2026-11-10T09:47:56.607Z",
-      "activity": "Adding slop",
-      "thought": "..."
     }
   ],
   "snippet": {
-    "repository": "JakeNesler/OpenProphet",
-    "path": "services/technical_analysis.go",
-    "commit": "3614481088b26ecd0c823272e826da27428dbcf3",
-    "startLine": 109,
-    "endLine": 124,
+    "repository": "Yscale-sh/yscale",
+    "path": "agent/internal/agent/pending_pod_constraints.go",
+    "commit": "cba4622a00ddc2a82adeed62e54176ca3e7fb9a0",
+    "startLine": 24,
+    "endLine": 39,
     "lines": [
-      "func CalculateMACD(bars []*interfaces.Bar) *MACDResult {",
-      "\tif len(bars) < 26 {",
-      "\t\treturn nil",
+      "func pendingPodConstraintRejection(pod *corev1.Pod, spec workload.Spec) string {",
+      "\tif pod.Spec.NodeName != \"\" {",
+      "\t\treturn pendingPodRejectUnsupportedNodeName",
       "\t}",
-      "",
-      "\tema12 := calculateEMA(bars, 12)",
-      "\tema26 := calculateEMA(bars, 26)",
-      "\tmacdLine := ema12 - ema26",
-      "",
-      "\t// For signal line, we'd need historical MACD values",
-      "\t// Simplified: use recent EMA as approximation",
-      "\tsignalLine := ema12 * 0.85 // simplified",
-      "",
-      "\treturn &MACDResult{",
-      "\t\tMACD:      macdLine,",
-      "\t\tSignal:    signalLine,"
+      "\tif !toleratesBurstNode(pod.Spec.Tolerations) {",
+      "\t\treturn pendingPodRejectMissingBurstToleration",
+      "\t}",
+      "\tif hasRequiredAffinity(pod.Spec.Affinity) {",
+      "\t\treturn pendingPodRejectUnsupportedAffinity",
+      "\t}",
+      "\tkeys := make([]string, 0, len(pod.Spec.NodeSelector))",
+      "\tfor key := range pod.Spec.NodeSelector {",
+      "\t\tkeys = append(keys, key)",
+      "\t}",
+      "\tsort.Strings(keys)",
+      "\tfor _, key := range keys {"
     ],
-    "url": "https://github.com/JakeNesler/OpenProphet/blob/3614481088b26ecd0c823272e826da27428dbcf3/services/technical_analysis.go#L109-L124"
+    "url": "https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/agent/internal/agent/pending_pod_constraints.go#L24-L39"
   }
 }
