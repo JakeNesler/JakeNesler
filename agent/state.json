@@ -1,9 +1,14 @@
 {
-  "tick": 54,
-  "runId": "43181889971",
-  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/43181889971",
-  "updatedAt": "2026-11-12T08:19:04.298Z",
+  "tick": 55,
+  "runId": "43265687020",
+  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/43265687020",
+  "updatedAt": "2026-11-12T17:05:47.615Z",
   "log": [
+    {
+      "at": "2026-11-12T17:05:47.615Z",
+      "activity": "Adding slop",
+      "thought": "..."
+    },
     {
       "at": "2026-11-12T08:19:04.298Z",
       "activity": "Deslopping",
@@ -28,31 +33,31 @@
       "at": "2026-11-11T03:02:16.222Z",
       "activity": "Deslopping",
       "thought": "..."
-    },
-    {
-      "at": "2026-11-10T23:18:53.685Z",
-      "activity": "Combobulating",
-      "thought": "Thinking."
     }
   ],
   "snippet": {
-    "repository": "JakeNesler/OpenProphet",
-    "path": "services/technical_analysis.go",
-    "commit": "3614481088b26ecd0c823272e826da27428dbcf3",
-    "startLine": 171,
-    "endLine": 180,
+    "repository": "Yscale-sh/yscale",
+    "path": "central/internal/decider/placement.go",
+    "commit": "cba4622a00ddc2a82adeed62e54176ca3e7fb9a0",
+    "startLine": 422,
+    "endLine": 436,
     "lines": [
-      "func average(values []float64) float64 {",
-      "\tif len(values) == 0 {",
-      "\t\treturn 0",
+      "func gpuAdmissionRefusalReason(err error, backend string, gpu *backends.GPUSpec) (string, bool) {",
+      "\tswitch {",
+      "\tcase errors.Is(err, errGPUPriceCapNotFinite):",
+      "\t\treturn \"\", false",
+      "\tcase errors.Is(err, errGPUPriceCapExceeded), errors.Is(err, errAWSGPUPriceUnverifiable):",
+      "\t\t// Both are the per-GPU ceiling refusing the placement: one because the",
+      "\t\t// resolved price is over it, the other because no price central trusts",
+      "\t\t// can prove it is under it.",
+      "\t\treturn state.PlacementRejectPriceAboveMaxHourly, true",
       "\t}",
-      "\tsum := 0.0",
-      "\tfor _, v := range values {",
-      "\t\tsum += v",
+      "\tif gpu == nil {",
+      "\t\treturn state.PlacementRejectSKUNotSupported, true",
       "\t}",
-      "\treturn sum / float64(len(values))",
+      "\treturn gpuShapeRejectionReason(backend, gpu), true",
       "}"
     ],
-    "url": "https://github.com/JakeNesler/OpenProphet/blob/3614481088b26ecd0c823272e826da27428dbcf3/services/technical_analysis.go#L171-L180"
+    "url": "https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/central/internal/decider/placement.go#L422-L436"
   }
 }
