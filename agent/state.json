@@ -1,9 +1,14 @@
 {
-  "tick": 58,
-  "runId": "43418287729",
-  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/43418287729",
-  "updatedAt": "2026-11-13T11:35:58.120Z",
+  "tick": 59,
+  "runId": "43485797105",
+  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/43485797105",
+  "updatedAt": "2026-11-13T18:46:24.965Z",
   "log": [
+    {
+      "at": "2026-11-13T18:46:24.965Z",
+      "activity": "Adding slop",
+      "thought": "..."
+    },
     {
       "at": "2026-11-13T11:35:58.120Z",
       "activity": "Deslopping",
@@ -28,37 +33,32 @@
       "at": "2026-11-12T08:19:04.298Z",
       "activity": "Deslopping",
       "thought": "..."
-    },
-    {
-      "at": "2026-11-12T01:02:17.193Z",
-      "activity": "Combobulating",
-      "thought": "Thinking."
     }
   ],
   "snippet": {
-    "repository": "JakeNesler/OpenProphet",
-    "path": "services/technical_analysis.go",
-    "commit": "2e96238425649a29d70e83346ab471259b04759c",
-    "startLine": 200,
-    "endLine": 215,
+    "repository": "Yscale-sh/yscale",
+    "path": "agent/internal/agent/pending_pod_constraints.go",
+    "commit": "cba4622a00ddc2a82adeed62e54176ca3e7fb9a0",
+    "startLine": 51,
+    "endLine": 66,
     "lines": [
-      "func calculateMomentum(bars []*interfaces.Bar) *MomentumResult {",
-      "\tif len(bars) < 6 {",
-      "\t\treturn nil",
+      "func toleratesBurstNode(tolerations []corev1.Toleration) bool {",
+      "\tfor _, toleration := range tolerations {",
+      "\t\tif toleration.Key != workload.LabelBurstNode ||",
+      "\t\t\t(toleration.Effect != \"\" && toleration.Effect != corev1.TaintEffectNoSchedule) {",
+      "\t\t\tcontinue",
+      "\t\t}",
+      "\t\tswitch toleration.Operator {",
+      "\t\tcase corev1.TolerationOpExists:",
+      "\t\t\treturn true",
+      "\t\tcase \"\", corev1.TolerationOpEqual:",
+      "\t\t\tif toleration.Value == \"true\" {",
+      "\t\t\t\treturn true",
+      "\t\t\t}",
+      "\t\t}",
       "\t}",
-      "",
-      "\tcurrent := bars[len(bars)-1].Close",
-      "\tday1 := bars[len(bars)-2].Close",
-      "\tday5 := bars[len(bars)-6].Close",
-      "",
-      "\treturn &MomentumResult{",
-      "\t\tPriceChange1D:   current - day1,",
-      "\t\tPriceChange5D:   current - day5,",
-      "\t\tPercentChange1D: ((current - day1) / day1) * 100,",
-      "\t\tPercentChange5D: ((current - day5) / day5) * 100,",
-      "\t}",
-      "}"
+      "\treturn false"
     ],
-    "url": "https://github.com/JakeNesler/OpenProphet/blob/2e96238425649a29d70e83346ab471259b04759c/services/technical_analysis.go#L200-L215"
+    "url": "https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/agent/internal/agent/pending_pod_constraints.go#L51-L66"
   }
 }
