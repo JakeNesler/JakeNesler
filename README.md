@@ -1,5 +1,5 @@
 <!-- profile-terminal:start -->
-[![Agent types a real public code excerpt beside a blinking pixel bird.](https://raw.githubusercontent.com/JakeNesler/JakeNesler/main/agent/terminal-57.gif)](https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/central/internal/cost/composite_source.go#L50-L55)
+[![Agent types a real public code excerpt beside a blinking pixel bird.](https://raw.githubusercontent.com/JakeNesler/JakeNesler/main/agent/terminal-58.gif)](https://github.com/JakeNesler/OpenProphet/blob/2e96238425649a29d70e83346ab471259b04759c/services/technical_analysis.go#L200-L215)
 <!-- profile-terminal:end -->
 
 ### Notable Repo Contributions:
