@@ -1,9 +1,14 @@
 {
-  "tick": 60,
-  "runId": "43533400416",
-  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/43533400416",
-  "updatedAt": "2026-11-14T00:19:48.165Z",
+  "tick": 61,
+  "runId": "43603273243",
+  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/43603273243",
+  "updatedAt": "2026-11-14T14:08:39.329Z",
   "log": [
+    {
+      "at": "2026-11-14T14:08:39.329Z",
+      "activity": "Combobulating",
+      "thought": "Thinking."
+    },
     {
       "at": "2026-11-14T00:19:48.165Z",
       "activity": "Percolating",
@@ -28,37 +33,32 @@
       "at": "2026-11-12T22:44:30.038Z",
       "activity": "Percolating",
       "thought": "Idling."
-    },
-    {
-      "at": "2026-11-12T17:05:47.615Z",
-      "activity": "Adding slop",
-      "thought": "..."
     }
   ],
   "snippet": {
-    "repository": "JakeNesler/OpenProphet",
-    "path": "services/technical_analysis.go",
-    "commit": "2e96238425649a29d70e83346ab471259b04759c",
-    "startLine": 217,
-    "endLine": 232,
+    "repository": "Yscale-sh/yscale",
+    "path": "central/internal/decider/placement.go",
+    "commit": "cba4622a00ddc2a82adeed62e54176ca3e7fb9a0",
+    "startLine": 443,
+    "endLine": 458,
     "lines": [
-      "func analyzeVolume(bars []*interfaces.Bar) *VolumeAnalysis {",
-      "\tif len(bars) < 20 {",
-      "\t\treturn nil",
+      "func gpuShapeRejectionReason(backend string, gpu *backends.GPUSpec) string {",
+      "\tmapGPU := gpuTypeMapperFor(backend)",
+      "\tif mapGPU == nil {",
+      "\t\treturn state.PlacementRejectGPUKindNotSupported",
       "\t}",
-      "",
-      "\tcurrentVolume := bars[len(bars)-1].Volume",
-      "",
-      "\t// Calculate average volume over last 20 bars",
-      "\tvolumeSum := int64(0)",
-      "\tfor i := len(bars) - 20; i < len(bars); i++ {",
-      "\t\tvolumeSum += bars[i].Volume",
+      "\tif len(gpu.SKUs) > 0 {",
+      "\t\t// A pinned SKU is refused by every current backend: none launches",
+      "\t\t// GPUSpec.SKUs exactly, so pricing one and launching another is the",
+      "\t\t// failure this refusal exists to prevent.",
+      "\t\treturn state.PlacementRejectSKUNotSupported",
       "\t}",
-      "\tavgVolume := float64(volumeSum) / 20.0",
-      "",
-      "\tratio := float64(currentVolume) / avgVolume",
-      ""
+      "\tcount := max(1, gpu.Count)",
+      "\tif _, err := mapGPU(&backends.GPUSpec{Kind: gpu.Kind, Count: 1}); err != nil {",
+      "\t\treturn state.PlacementRejectGPUKindNotSupported",
+      "\t}",
+      "\tif _, err := mapGPU(&backends.GPUSpec{Kind: gpu.Kind, Count: count}); err != nil {"
     ],
-    "url": "https://github.com/JakeNesler/OpenProphet/blob/2e96238425649a29d70e83346ab471259b04759c/services/technical_analysis.go#L217-L232"
+    "url": "https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/central/internal/decider/placement.go#L443-L458"
   }
 }
