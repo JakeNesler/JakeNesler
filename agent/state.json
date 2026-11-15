@@ -1,9 +1,14 @@
 {
-  "tick": 63,
-  "runId": "43650865689",
-  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/43650865689",
-  "updatedAt": "2026-11-14T22:59:15.083Z",
+  "tick": 64,
+  "runId": "43668709347",
+  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/43668709347",
+  "updatedAt": "2026-11-15T02:38:40.791Z",
   "log": [
+    {
+      "at": "2026-11-15T02:38:40.791Z",
+      "activity": "Percolating",
+      "thought": "Idling."
+    },
     {
       "at": "2026-11-14T22:59:15.083Z",
       "activity": "Adding slop",
@@ -28,27 +33,29 @@
       "at": "2026-11-13T18:46:24.965Z",
       "activity": "Adding slop",
       "thought": "..."
-    },
-    {
-      "at": "2026-11-13T11:35:58.120Z",
-      "activity": "Deslopping",
-      "thought": "..."
     }
   ],
   "snippet": {
-    "repository": "Yscale-sh/yscale",
-    "path": "central/internal/cost/composite_source.go",
-    "commit": "cba4622a00ddc2a82adeed62e54176ca3e7fb9a0",
-    "startLine": 50,
-    "endLine": 55,
+    "repository": "JakeNesler/OpenProphet",
+    "path": "services/technical_analysis.go",
+    "commit": "2e96238425649a29d70e83346ab471259b04759c",
+    "startLine": 60,
+    "endLine": 72,
     "lines": [
-      "func NewCompositeSource(state StateProvisioningSource, lifecycle LifecycleSource) *CompositeSource {",
-      "\treturn &CompositeSource{",
-      "\t\tstate:     state,",
-      "\t\tlifecycle: lifecycle,",
+      "func CalculateSMA(bars []*interfaces.Bar, period int) float64 {",
+      "\tif len(bars) < period {",
+      "\t\treturn 0",
       "\t}",
+      "",
+      "\tsum := 0.0",
+      "\tstart := len(bars) - period",
+      "\tfor i := start; i < len(bars); i++ {",
+      "\t\tsum += bars[i].Close",
+      "\t}",
+      "",
+      "\treturn sum / float64(period)",
       "}"
     ],
-    "url": "https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/central/internal/cost/composite_source.go#L50-L55"
+    "url": "https://github.com/JakeNesler/OpenProphet/blob/2e96238425649a29d70e83346ab471259b04759c/services/technical_analysis.go#L60-L72"
   }
 }
