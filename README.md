@@ -1,5 +1,5 @@
 <!-- profile-terminal:start -->
-[![Agent types a real public code excerpt beside a blinking pixel bird.](https://raw.githubusercontent.com/JakeNesler/JakeNesler/main/agent/terminal-70.gif)](https://github.com/JakeNesler/OpenProphet/blob/2e96238425649a29d70e83346ab471259b04759c/services/technical_analysis.go#L171-L180)
+[![Agent types a real public code excerpt beside a blinking pixel bird.](https://raw.githubusercontent.com/JakeNesler/JakeNesler/main/agent/terminal-71.gif)](https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/agent/internal/agent/pending_pod_constraints.go#L102-L117)
 <!-- profile-terminal:end -->
 
 ### Notable Repo Contributions:
