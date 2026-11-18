@@ -1,9 +1,14 @@
 {
-  "tick": 71,
-  "runId": "44226508416",
-  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/44226508416",
-  "updatedAt": "2026-11-18T02:53:49.273Z",
+  "tick": 72,
+  "runId": "44296587614",
+  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/44296587614",
+  "updatedAt": "2026-11-18T11:39:15.658Z",
   "log": [
+    {
+      "at": "2026-11-18T11:39:15.658Z",
+      "activity": "Percolating",
+      "thought": "Idling."
+    },
     {
       "at": "2026-11-18T02:53:49.273Z",
       "activity": "Adding slop",
@@ -28,37 +33,32 @@
       "at": "2026-11-16T02:04:39.620Z",
       "activity": "Adding slop",
       "thought": "..."
-    },
-    {
-      "at": "2026-11-15T21:48:52.817Z",
-      "activity": "Deslopping",
-      "thought": "..."
     }
   ],
   "snippet": {
-    "repository": "Yscale-sh/yscale",
-    "path": "agent/internal/agent/pending_pod_constraints.go",
-    "commit": "cba4622a00ddc2a82adeed62e54176ca3e7fb9a0",
-    "startLine": 102,
-    "endLine": 117,
+    "repository": "JakeNesler/OpenProphet",
+    "path": "services/technical_analysis.go",
+    "commit": "2e96238425649a29d70e83346ab471259b04759c",
+    "startLine": 182,
+    "endLine": 197,
     "lines": [
-      "func supportedBurstSelector(key, value string, spec workload.Spec) bool {",
-      "\tswitch key {",
-      "\tcase workload.LabelBurstNode:",
-      "\t\treturn value == \"true\"",
-      "\tcase k8sv1.LabelNvidiaGPUPresent:",
-      "\t\treturn value == \"true\" && spec.GPU != nil",
-      "\tcase k8sv1.LabelGPUKind:",
-      "\t\treturn spec.GPU != nil && spec.GPU.Kind != \"\" && value == spec.GPU.Kind",
-      "\tcase k8sv1.LabelGPUCount:",
-      "\t\tif spec.GPU == nil {",
-      "\t\t\treturn false",
-      "\t\t}",
-      "\t\treturn value == k8sv1.GPUCountLabelValue(spec.GPU.Count)",
-      "\tcase k8sv1.LabelProviderClass:",
-      "\t\tbackend := strings.TrimSpace(spec.Backend)",
-      "\t\treturn backend != \"\" && backend != \"auto\" && value == backend"
+      "func calculateEMA(bars []*interfaces.Bar, period int) float64 {",
+      "\tif len(bars) < period {",
+      "\t\treturn bars[len(bars)-1].Close",
+      "\t}",
+      "",
+      "\tmultiplier := 2.0 / float64(period+1)",
+      "",
+      "\t// Start with SMA",
+      "\tema := CalculateSMA(bars[:period], period)",
+      "",
+      "\t// Calculate EMA for remaining bars",
+      "\tfor i := period; i < len(bars); i++ {",
+      "\t\tema = (bars[i].Close * multiplier) + (ema * (1 - multiplier))",
+      "\t}",
+      "",
+      "\treturn ema"
     ],
-    "url": "https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/agent/internal/agent/pending_pod_constraints.go#L102-L117"
+    "url": "https://github.com/JakeNesler/OpenProphet/blob/2e96238425649a29d70e83346ab471259b04759c/services/technical_analysis.go#L182-L197"
   }
 }
