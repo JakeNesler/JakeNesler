@@ -1,9 +1,14 @@
 {
-  "tick": 78,
-  "runId": "44703281510",
-  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/44703281510",
-  "updatedAt": "2026-11-20T08:32:15.367Z",
+  "tick": 79,
+  "runId": "44781839518",
+  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/44781839518",
+  "updatedAt": "2026-11-20T17:17:42.538Z",
   "log": [
+    {
+      "at": "2026-11-20T17:17:42.538Z",
+      "activity": "Adding slop",
+      "thought": "..."
+    },
     {
       "at": "2026-11-20T08:32:15.367Z",
       "activity": "Deslopping",
@@ -28,37 +33,32 @@
       "at": "2026-11-19T01:30:10.228Z",
       "activity": "Deslopping",
       "thought": "..."
-    },
-    {
-      "at": "2026-11-18T19:37:50.023Z",
-      "activity": "Combobulating",
-      "thought": "Thinking."
     }
   ],
   "snippet": {
-    "repository": "JakeNesler/OpenProphet",
-    "path": "services/technical_analysis.go",
-    "commit": "2e96238425649a29d70e83346ab471259b04759c",
-    "startLine": 248,
-    "endLine": 263,
+    "repository": "Yscale-sh/yscale",
+    "path": "central/internal/decider/placement.go",
+    "commit": "cba4622a00ddc2a82adeed62e54176ca3e7fb9a0",
+    "startLine": 294,
+    "endLine": 309,
     "lines": [
-      "func generateSignal(result *AnalysisResult) (string, float64) {",
-      "\tsignals := make(map[string]int)",
-      "\tconfidence := 0.0",
-      "",
-      "\t// Price vs SMA signals",
-      "\tif result.SMA20 > 0 {",
-      "\t\tif result.CurrentPrice > result.SMA20 {",
-      "\t\t\tsignals[\"buy\"]++",
-      "\t\t\tconfidence += 15",
-      "\t\t} else {",
-      "\t\t\tsignals[\"sell\"]++",
-      "\t\t\tconfidence += 15",
-      "\t\t}",
-      "\t}",
-      "",
-      "\tif result.SMA50 > 0 {"
+      "func (d *Decider) baseReceipt(wl *workload.Workload, opts handlers.PlanOptions,",
+      "\tresources backends.ResourceRequirements) state.PlacementReceipt {",
+      "\treceipt := state.PlacementReceipt{",
+      "\t\tVersion:            state.PlacementReceiptVersion,",
+      "\t\tTenant:             opts.CustomerID,",
+      "\t\tRequestedClusterID: opts.ClusterPlacement.RequestedClusterID,",
+      "\t\tGrantedClusterID:   opts.ClusterPlacement.GrantedClusterID,",
+      "\t\tClusterMode:        opts.ClusterPlacement.Mode,",
+      "\t\tClusterRule:        opts.ClusterPlacement.Rule,",
+      "\t\tClusterRuleVersion: opts.ClusterPlacement.RuleVersion,",
+      "\t\tRequested: state.PlacementRequest{",
+      "\t\t\tCPUMillis: resources.CPUMillis,",
+      "\t\t\tMemoryMB:  resources.MemoryMB,",
+      "\t\t},",
+      "\t\tConstraints: state.PlacementConstraints{",
+      "\t\t\tBackendPin: wl.Spec.Backend,"
     ],
-    "url": "https://github.com/JakeNesler/OpenProphet/blob/2e96238425649a29d70e83346ab471259b04759c/services/technical_analysis.go#L248-L263"
+    "url": "https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/central/internal/decider/placement.go#L294-L309"
   }
 }
