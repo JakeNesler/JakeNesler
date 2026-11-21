@@ -1,9 +1,14 @@
 {
-  "tick": 81,
-  "runId": "44865352884",
-  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/44865352884",
-  "updatedAt": "2026-11-21T04:17:40.616Z",
+  "tick": 82,
+  "runId": "44906777129",
+  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/44906777129",
+  "updatedAt": "2026-11-21T13:01:52.510Z",
   "log": [
+    {
+      "at": "2026-11-21T13:01:52.510Z",
+      "activity": "Deslopping",
+      "thought": "..."
+    },
     {
       "at": "2026-11-21T04:17:40.616Z",
       "activity": "Combobulating",
@@ -28,27 +33,32 @@
       "at": "2026-11-20T00:56:24.094Z",
       "activity": "Combobulating",
       "thought": "Thinking."
-    },
-    {
-      "at": "2026-11-19T18:41:21.973Z",
-      "activity": "Percolating",
-      "thought": "Idling."
     }
   ],
   "snippet": {
-    "repository": "Yscale-sh/yscale",
-    "path": "central/internal/cost/composite_source.go",
-    "commit": "cba4622a00ddc2a82adeed62e54176ca3e7fb9a0",
-    "startLine": 50,
-    "endLine": 55,
+    "repository": "JakeNesler/OpenProphet",
+    "path": "services/technical_analysis.go",
+    "commit": "2e96238425649a29d70e83346ab471259b04759c",
+    "startLine": 75,
+    "endLine": 90,
     "lines": [
-      "func NewCompositeSource(state StateProvisioningSource, lifecycle LifecycleSource) *CompositeSource {",
-      "\treturn &CompositeSource{",
-      "\t\tstate:     state,",
-      "\t\tlifecycle: lifecycle,",
+      "func CalculateRSI(bars []*interfaces.Bar, period int) float64 {",
+      "\tif len(bars) < period+1 {",
+      "\t\treturn 50.0 // neutral",
       "\t}",
-      "}"
+      "",
+      "\tgains := make([]float64, 0)",
+      "\tlosses := make([]float64, 0)",
+      "",
+      "\tstart := len(bars) - period - 1",
+      "\tfor i := start; i < len(bars)-1; i++ {",
+      "\t\tchange := bars[i+1].Close - bars[i].Close",
+      "\t\tif change > 0 {",
+      "\t\t\tgains = append(gains, change)",
+      "\t\t\tlosses = append(losses, 0)",
+      "\t\t} else {",
+      "\t\t\tgains = append(gains, 0)"
     ],
-    "url": "https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/central/internal/cost/composite_source.go#L50-L55"
+    "url": "https://github.com/JakeNesler/OpenProphet/blob/2e96238425649a29d70e83346ab471259b04759c/services/technical_analysis.go#L75-L90"
   }
 }
