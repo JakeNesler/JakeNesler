@@ -1,9 +1,14 @@
 {
-  "tick": 80,
-  "runId": "44836128477",
-  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/44836128477",
-  "updatedAt": "2026-11-20T23:21:16.378Z",
+  "tick": 81,
+  "runId": "44865352884",
+  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/44865352884",
+  "updatedAt": "2026-11-21T04:17:40.616Z",
   "log": [
+    {
+      "at": "2026-11-21T04:17:40.616Z",
+      "activity": "Combobulating",
+      "thought": "Thinking."
+    },
     {
       "at": "2026-11-20T23:21:16.378Z",
       "activity": "Percolating",
@@ -28,34 +33,22 @@
       "at": "2026-11-19T18:41:21.973Z",
       "activity": "Percolating",
       "thought": "Idling."
-    },
-    {
-      "at": "2026-11-19T09:30:30.925Z",
-      "activity": "Adding slop",
-      "thought": "..."
     }
   ],
   "snippet": {
-    "repository": "JakeNesler/OpenProphet",
-    "path": "services/technical_analysis.go",
-    "commit": "2e96238425649a29d70e83346ab471259b04759c",
-    "startLine": 60,
-    "endLine": 72,
+    "repository": "Yscale-sh/yscale",
+    "path": "central/internal/cost/composite_source.go",
+    "commit": "cba4622a00ddc2a82adeed62e54176ca3e7fb9a0",
+    "startLine": 50,
+    "endLine": 55,
     "lines": [
-      "func CalculateSMA(bars []*interfaces.Bar, period int) float64 {",
-      "\tif len(bars) < period {",
-      "\t\treturn 0",
+      "func NewCompositeSource(state StateProvisioningSource, lifecycle LifecycleSource) *CompositeSource {",
+      "\treturn &CompositeSource{",
+      "\t\tstate:     state,",
+      "\t\tlifecycle: lifecycle,",
       "\t}",
-      "",
-      "\tsum := 0.0",
-      "\tstart := len(bars) - period",
-      "\tfor i := start; i < len(bars); i++ {",
-      "\t\tsum += bars[i].Close",
-      "\t}",
-      "",
-      "\treturn sum / float64(period)",
       "}"
     ],
-    "url": "https://github.com/JakeNesler/OpenProphet/blob/2e96238425649a29d70e83346ab471259b04759c/services/technical_analysis.go#L60-L72"
+    "url": "https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/central/internal/cost/composite_source.go#L50-L55"
   }
 }
