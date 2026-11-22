@@ -1,9 +1,14 @@
 {
-  "tick": 84,
-  "runId": "44966051321",
-  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/44966051321",
-  "updatedAt": "2026-11-22T00:19:45.868Z",
+  "tick": 85,
+  "runId": "44998337689",
+  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/44998337689",
+  "updatedAt": "2026-11-22T07:28:19.185Z",
   "log": [
+    {
+      "at": "2026-11-22T07:28:19.185Z",
+      "activity": "Combobulating",
+      "thought": "Thinking."
+    },
     {
       "at": "2026-11-22T00:19:45.868Z",
       "activity": "Percolating",
@@ -28,37 +33,25 @@
       "at": "2026-11-20T23:21:16.378Z",
       "activity": "Percolating",
       "thought": "Idling."
-    },
-    {
-      "at": "2026-11-20T17:17:42.538Z",
-      "activity": "Adding slop",
-      "thought": "..."
     }
   ],
   "snippet": {
-    "repository": "JakeNesler/OpenProphet",
-    "path": "services/technical_analysis.go",
-    "commit": "2e96238425649a29d70e83346ab471259b04759c",
-    "startLine": 109,
-    "endLine": 124,
+    "repository": "Yscale-sh/yscale",
+    "path": "central/internal/decider/placement.go",
+    "commit": "cba4622a00ddc2a82adeed62e54176ca3e7fb9a0",
+    "startLine": 409,
+    "endLine": 417,
     "lines": [
-      "func CalculateMACD(bars []*interfaces.Bar) *MACDResult {",
-      "\tif len(bars) < 26 {",
-      "\t\treturn nil",
+      "func routeRefusalReason(err error) string {",
+      "\tswitch {",
+      "\tcase errors.Is(err, errGPUUnsupportedByBackend):",
+      "\t\treturn state.PlacementRejectGPUKindNotSupported",
+      "\tcase errors.Is(err, errUnknownBackend):",
+      "\t\treturn state.PlacementRejectProviderNotAllowed",
       "\t}",
-      "",
-      "\tema12 := calculateEMA(bars, 12)",
-      "\tema26 := calculateEMA(bars, 26)",
-      "\tmacdLine := ema12 - ema26",
-      "",
-      "\t// For signal line, we'd need historical MACD values",
-      "\t// Simplified: use recent EMA as approximation",
-      "\tsignalLine := ema12 * 0.85 // simplified",
-      "",
-      "\treturn &MACDResult{",
-      "\t\tMACD:      macdLine,",
-      "\t\tSignal:    signalLine,"
+      "\treturn state.PlacementRejectProviderNotAllowed",
+      "}"
     ],
-    "url": "https://github.com/JakeNesler/OpenProphet/blob/2e96238425649a29d70e83346ab471259b04759c/services/technical_analysis.go#L109-L124"
+    "url": "https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/central/internal/decider/placement.go#L409-L417"
   }
 }
