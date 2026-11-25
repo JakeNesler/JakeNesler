@@ -1,9 +1,14 @@
 {
-  "tick": 91,
-  "runId": "45617764338",
-  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/45617764338",
-  "updatedAt": "2026-11-25T12:51:51.183Z",
+  "tick": 92,
+  "runId": "45713721833",
+  "runUrl": "https://github.com/JakeNesler/JakeNesler/actions/runs/45713721833",
+  "updatedAt": "2026-11-25T22:30:20.926Z",
   "log": [
+    {
+      "at": "2026-11-25T22:30:20.926Z",
+      "activity": "Percolating",
+      "thought": "Idling."
+    },
     {
       "at": "2026-11-25T12:51:51.183Z",
       "activity": "Adding slop",
@@ -28,36 +33,32 @@
       "at": "2026-11-23T01:59:20.006Z",
       "activity": "Adding slop",
       "thought": "..."
-    },
-    {
-      "at": "2026-11-22T21:17:55.840Z",
-      "activity": "Deslopping",
-      "thought": "..."
     }
   ],
   "snippet": {
-    "repository": "Yscale-sh/yscale",
-    "path": "central/internal/decider/placement.go",
-    "commit": "cba4622a00ddc2a82adeed62e54176ca3e7fb9a0",
-    "startLine": 422,
-    "endLine": 436,
+    "repository": "JakeNesler/OpenProphet",
+    "path": "services/technical_analysis.go",
+    "commit": "2e96238425649a29d70e83346ab471259b04759c",
+    "startLine": 217,
+    "endLine": 232,
     "lines": [
-      "func gpuAdmissionRefusalReason(err error, backend string, gpu *backends.GPUSpec) (string, bool) {",
-      "\tswitch {",
-      "\tcase errors.Is(err, errGPUPriceCapNotFinite):",
-      "\t\treturn \"\", false",
-      "\tcase errors.Is(err, errGPUPriceCapExceeded), errors.Is(err, errAWSGPUPriceUnverifiable):",
-      "\t\t// Both are the per-GPU ceiling refusing the placement: one because the",
-      "\t\t// resolved price is over it, the other because no price central trusts",
-      "\t\t// can prove it is under it.",
-      "\t\treturn state.PlacementRejectPriceAboveMaxHourly, true",
+      "func analyzeVolume(bars []*interfaces.Bar) *VolumeAnalysis {",
+      "\tif len(bars) < 20 {",
+      "\t\treturn nil",
       "\t}",
-      "\tif gpu == nil {",
-      "\t\treturn state.PlacementRejectSKUNotSupported, true",
+      "",
+      "\tcurrentVolume := bars[len(bars)-1].Volume",
+      "",
+      "\t// Calculate average volume over last 20 bars",
+      "\tvolumeSum := int64(0)",
+      "\tfor i := len(bars) - 20; i < len(bars); i++ {",
+      "\t\tvolumeSum += bars[i].Volume",
       "\t}",
-      "\treturn gpuShapeRejectionReason(backend, gpu), true",
-      "}"
+      "\tavgVolume := float64(volumeSum) / 20.0",
+      "",
+      "\tratio := float64(currentVolume) / avgVolume",
+      ""
     ],
-    "url": "https://github.com/Yscale-sh/yscale/blob/cba4622a00ddc2a82adeed62e54176ca3e7fb9a0/central/internal/decider/placement.go#L422-L436"
+    "url": "https://github.com/JakeNesler/OpenProphet/blob/2e96238425649a29d70e83346ab471259b04759c/services/technical_analysis.go#L217-L232"
   }
 }
